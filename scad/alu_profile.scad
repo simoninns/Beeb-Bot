@@ -26,7 +26,33 @@ include <BOSL/constants.scad>
 use <BOSL/transforms.scad>
 use <BOSL/shapes.scad>
 
+include <common.scad>
+
+// Draws an aluminium profile end cap
+module profile_end_cap()
+{
+    difference() {
+        cuboid([15,15,2], chamfer=0.5, edges=EDGES_Z_ALL+EDGES_TOP);
+
+        // Cut out channels
+        move([6,0,0]) cyl(h=3, d=4);
+        move([0,6,0]) cyl(h=3, d=4);
+        move([-6,0,0]) cyl(h=3, d=4);
+        move([0,-6,0]) cyl(h=3, d=4);
+    }
+
+    // Add a square pin to the top-side
+    move([0,0,1.5]) square_pin(true);
+
+    // Add a cuboid underneath for attachment to profile
+    move([0,0,-3.5]) cuboid([5,5,5], chamfer = 0.5, edges=EDGES_Z_ALL+EDGES_BOTTOM);
+}
+
 module alu_profile(length)
 {
-    
+    // Profile length is -4 as profile caps are 2mm thick
+    color("lightgrey") column_body(length - 4, true);
+
+    color([0.2,0.2,0.2]) move([0,0,(length / 2) - 1]) profile_end_cap();
+    color([0.2,0.2,0.2]) rotate([180,0,0]) move([0,0,(length / 2) - 1]) profile_end_cap();
 }

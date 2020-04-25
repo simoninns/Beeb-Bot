@@ -1,6 +1,6 @@
 /************************************************************************
 
-	main.scad
+	block.scad
     
 	Beeb-Bot
     Copyright (C) 2020 Simon Inns
@@ -22,17 +22,25 @@
     
 ************************************************************************/
 
-include <alu_profile.scad>
-include <block.scad>
+include <BOSL/constants.scad>
+use <BOSL/transforms.scad>
+use <BOSL/shapes.scad>
 
-// Rendering quality
-$fn = 20;
+include <common.scad>
 
-// Display Aluminum profile?
-display_alu_profile = "Yes"; // [Yes, No]
+module block15(length)
+{
+    // Profile length is -4 as profile caps are 2mm thick
+    color("lightgrey") {
+        difference() {
+            column_body(length, false);
+            move([0,0,-(length / 2) + 1.5]) xcyl(h=16, d=4);
 
-// Display 15x15 block?
-display_block15 = "Yes"; // [Yes, No]
+            move([6.5,0,-(length / 2) + 1]) cuboid([5,4,5]);
+            move([-6.5,0,-(length / 2) + 1]) cuboid([5,4,5]);
+        }
+    }
 
-if (display_alu_profile == "Yes") alu_profile(30);
-if (display_block15 == "Yes") block15(15);
+    // Add a square pin to the top-side
+    color([0.2,0.2,0.2]) move([0,0,(length / 2) + 0.5]) square_pin(true);
+}
