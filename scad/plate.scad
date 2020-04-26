@@ -1,6 +1,6 @@
 /************************************************************************
 
-	block.scad
+	plate.scad
     
 	Beeb-Bot
     Copyright (C) 2020 Simon Inns
@@ -28,34 +28,47 @@ use <BOSL/shapes.scad>
 
 include <common.scad>
 
-module render_block15(length)
+module render_pin_plate(x_units)
 {
-   // Profile length is -4 as profile caps are 2mm thick
-    color("lightgrey") {
-        difference() {
-            column_body(length, false);
-            move([0,0,-(length / 2) + 2]) xcyl(h=16, d=4);
+    move([-((x_units - 1) / 2) * 15,0,0]) {
+        for (xpos = [0 : x_units - 1]) {
+            move([xpos * 15,0,0]) {
+                cuboid([15,15,2]);
 
-            move([6,0,-(length / 2) + 1.5]) cuboid([5,4,5]);
-            move([-6,0,-(length / 2) + 1.5]) cuboid([5,4,5]);
-            move([0,0,-(length / 2)]) cuboid([15,3,3]);
+                // Add a pin to the top-side
+                move([0,0,1.5]) square_pin(false);
+            }
         }
     }
-
-    // Add a square pin to the top-side
-    color([0.2,0.2,0.2]) move([0,0,(length / 2) + 0.5]) square_pin(false);
 }
 
-module block15(y_units, printMode)
+module render_flat_plate(x_units, y_units)
 {
-    length = y_units * 15;
-    
+    // Only render if the y_units are greater than 1
+    if (y_units > 1) {
+        for (ypos = [0 : y_units - 1]) {
+            move([-((x_units - 1) / 2) * 15,0,0]) {
+                for (xpos = [0 : x_units - 1]) {
+                    move([xpos * 15,ypos * 15,0]) {
+                        cuboid([15,15,2]);
+                    }
+                }
+            }
+        }
+    }
+}
+
+module plate15(x_units, y_units, printMode)
+{
     if (printMode) {
         // Display ready for 3D printing
-        move([0,0,(length / 2)]) {
-            render_block15(length);
+        move([0,0,1]) {
+            color("red") render_pin_plate(x_units);
+            color("red") render_flat_plate(x_units, y_units);
         }
+
     } else {
-        render_block15(length);
+        color("red") render_pin_plate(x_units);
+        color("red") render_flat_plate(x_units, y_units);
     }
 }

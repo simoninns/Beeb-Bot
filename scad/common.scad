@@ -26,16 +26,17 @@ include <BOSL/constants.scad>
 use <BOSL/transforms.scad>
 use <BOSL/shapes.scad>
 
-// Draws a square pin.  If split is true, a 1mm split is removed from 
-// the top of the pin
+// Draws a square pin
+// If split is true, a 1mm split is removed from the top of the pin
 module square_pin(split)
 {
     difference() {
         union() {
-            cuboid([3,3,1], chamfer = 0.25, edges=EDGES_Z_ALL);
-            move([0,0,1]) cuboid([4,4,2], chamfer = 0.5, edges=EDGES_Z_ALL+EDGES_BOTTOM);
+            move([0,0,-0.125]) rounded_prismoid(size1=[3,3], size2=[3,3], h=0.75, r=0.5, center=true);
+            move([0,0,0.75]) rounded_prismoid(size1=[3,3], size2=[4,4], h=1, r=0.5, center=true);
+            move([0,0,1.875]) cuboid([4,4,1.25], fillet = 0.5, edges=EDGES_Z_ALL+EDGES_TOP);
         }
-        if (split) rotate([0,0,45]) move([0,0,2]) cuboid([6,1,2]);
+        if (split) rotate([0,0,45]) move([0,0,2.5]) cuboid([6,0.75,2]);
     }
 }
 
@@ -46,10 +47,15 @@ module column_body(length, cap_mount)
         cuboid([15,15,length], chamfer=0.5, edges=EDGES_Z_ALL);
 
         // Cut out channels
-        move([6,0,0]) cyl(h=length + 2, d=4);
-        move([0,6,0]) cyl(h=length + 2, d=4);
-        move([-6,0,0]) cyl(h=length + 2, d=4);
-        move([0,-6,0]) cyl(h=length + 2, d=4);
+        move([5.5,0,0]) cyl(h=length + 2, d=4);
+        move([0,5.5,0]) cyl(h=length + 2, d=4);
+        move([-5.5,0,0]) cyl(h=length + 2, d=4);
+        move([0,-5.5,0]) cyl(h=length + 2, d=4);
+
+        move([7.5,0,0]) cuboid([3,3,length+2]);
+        move([0,7.5,0]) cuboid([3,3,length+2]);
+        move([-7.5,0,0]) cuboid([3,3,length+2]);
+        move([0,-7.5,0]) cuboid([3,3,length+2]);
 
         // Recesses to allow attachement of profile caps
         if (cap_mount) {
@@ -57,4 +63,6 @@ module column_body(length, cap_mount)
             rotate([180,0,0]) move([0,0,(length / 2) + 3 - 5]) cuboid([5,5,6], chamfer = 0.5, edges=EDGES_Z_ALL+EDGES_BOTTOM);
         }
     }
+
+    
 }

@@ -24,15 +24,37 @@
 
 include <alu_profile.scad>
 include <block.scad>
+include <plate.scad>
 
 // Rendering quality
 $fn = 20;
 
+// Print mode
+use_print_mode = "Yes"; // [Yes, No]
+
 // Display Aluminum profile?
 display_alu_profile = "Yes"; // [Yes, No]
 
-// Display 15x15 block?
-display_block15 = "Yes"; // [Yes, No]
+// Display building block 15?
+display_building_block15 = "Yes"; // [Yes, No]
 
-if (display_alu_profile == "Yes") alu_profile(30);
-if (display_block15 == "Yes") block15(15);
+// Display building block 30?
+display_building_block30 = "Yes"; // [Yes, No]
+
+// Display building plate 30x90?
+display_building_plate_30x90 = "Yes"; // [Yes, No]
+
+// Display building plate 15x90?
+display_building_plate_15x90 = "Yes"; // [Yes, No]
+
+// Main function 
+printMode = (use_print_mode == "Yes") ? true:false;
+
+// Note: Units are multiples of 15mm
+if (display_alu_profile == "Yes") alu_profile15(90/15, printMode);
+
+if (display_building_block15 == "Yes") block15(1, printMode);
+if (display_building_block30 == "Yes") block15(2, printMode);
+
+if (display_building_plate_30x90 == "Yes") plate15(6, 2, printMode);
+if (display_building_plate_15x90 == "Yes") plate15(6, 1, printMode);

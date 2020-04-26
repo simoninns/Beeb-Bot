@@ -29,30 +29,60 @@ use <BOSL/shapes.scad>
 include <common.scad>
 
 // Draws an aluminium profile end cap
+// Note: end cap is 1.5mm high to allow for tollerances once
+// the piece is assembled (should be 2mm)
 module profile_end_cap()
 {
     difference() {
-        cuboid([15,15,2], chamfer=0.5, edges=EDGES_Z_ALL+EDGES_TOP);
+        cuboid([15,15,1.5], chamfer=0.5, edges=EDGES_Z_ALL+EDGES_TOP);
 
         // Cut out channels
-        move([6,0,0]) cyl(h=3, d=4);
-        move([0,6,0]) cyl(h=3, d=4);
-        move([-6,0,0]) cyl(h=3, d=4);
-        move([0,-6,0]) cyl(h=3, d=4);
+        move([5.5,0,0]) cyl(h=3, d=4);
+        move([0,5.5,0]) cyl(h=3, d=4);
+        move([-5.5,0,0]) cyl(h=3, d=4);
+        move([0,-5.5,0]) cyl(h=3, d=4);
+
+        move([7.5,0,0]) cuboid([3,3,3]);
+        move([0,7.5,0]) cuboid([3,3,3]);
+        move([-7.5,0,0]) cuboid([3,3,3]);
+        move([0,-7.5,0]) cuboid([3,3,3]);
     }
 
     // Add a square pin to the top-side
-    move([0,0,1.5]) square_pin(true);
+    move([0,0,1.25]) square_pin(false);
 
     // Add a cuboid underneath for attachment to profile
-    move([0,0,-3.5]) cuboid([5,5,5], chamfer = 0.5, edges=EDGES_Z_ALL+EDGES_BOTTOM);
+    move([0,0,-3]) cuboid([5,5,5], chamfer = 0.5, edges=EDGES_Z_ALL+EDGES_BOTTOM);
 }
 
-module alu_profile(length)
+module render_alu_profile(length)
 {
     // Profile length is -4 as profile caps are 2mm thick
     color("lightgrey") column_body(length - 4, true);
 
     color([0.2,0.2,0.2]) move([0,0,(length / 2) - 1]) profile_end_cap();
     color([0.2,0.2,0.2]) rotate([180,0,0]) move([0,0,(length / 2) - 1]) profile_end_cap();
+}
+
+module alu_profile15(y_units, printMode)
+{
+    length = y_units * 15;
+    
+    if (printMode) {
+        // Profile length is -4 as profile caps are 2mm thick
+
+        // Display ready for 3D printing
+        move([0,0,(length / 2) - 2]) {
+            color("lightgrey") column_body(length - 4, true);
+        }
+
+        color([0.2,0.2,0.2]) move([25,0,5.5]) profile_end_cap();
+        color([0.2,0.2,0.2]) move([25 + 16,0,5.5]) profile_end_cap();
+    } else {
+        // Profile length is -4 as profile caps are 2mm thick
+        color("lightgrey") column_body(length - 4, true);
+
+        color([0.2,0.2,0.2]) move([0,0,(length / 2) - 1]) profile_end_cap();
+        color([0.2,0.2,0.2]) rotate([180,0,0]) move([0,0,(length / 2) - 1]) profile_end_cap();
+    }
 }
