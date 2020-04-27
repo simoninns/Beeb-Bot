@@ -130,7 +130,7 @@ module render_blockv15()
 module blockv15(printMode)
 {
     if (printMode) {
-        move([0,0,(7.5 / 2)]) render_blockv15();
+        move([0,0,(15 / 2)]) render_blockv15();
     } else {
         color("red") render_blockv15();
     }

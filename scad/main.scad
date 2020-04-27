@@ -25,39 +25,46 @@
 include <alu_profile.scad>
 include <block.scad>
 include <plate.scad>
+include <link.scad>
 
 // Rendering quality
 $fn = 20;
 
 // Print mode
-use_print_mode = "Yes"; // [Yes, No]
+use_print_mode = "No"; // [Yes, No]
 
 // Display Aluminum 90mm profile?
-display_alu90_profile = "Yes"; // [Yes, No]
+display_alu90_profile = "No"; // [Yes, No]
 
 // Display Aluminum 120mm profile?
-display_alu120_profile = "Yes"; // [Yes, No]
+display_alu120_profile = "No"; // [Yes, No]
 
 // Display building block 5?
-display_building_block5 = "Yes"; // [Yes, No]
+display_building_block5 = "No"; // [Yes, No]
 
 // Display building block 7.5?
-display_building_block7p5 = "Yes"; // [Yes, No]
+display_building_block7p5 = "No"; // [Yes, No]
 
 // Display building block 15?
 display_building_block15 = "Yes"; // [Yes, No]
 
 // Display building block 30?
-display_building_block30 = "Yes"; // [Yes, No]
+display_building_block30 = "No"; // [Yes, No]
 
 // Display building block V15 corner?
-display_building_blockv15 = "Yes"; // [Yes, No]
+display_building_blockv15 = "No"; // [Yes, No]
 
 // Display building plate 30x90?
-display_building_plate_30x90 = "Yes"; // [Yes, No]
+display_building_plate_30x90 = "No"; // [Yes, No]
 
 // Display building plate 15x90?
-display_building_plate_15x90 = "Yes"; // [Yes, No]
+display_building_plate_15x90 = "No"; // [Yes, No]
+
+// Display link 15?
+display_link15 = "No"; // [Yes, No]
+
+// Display link 30?
+display_link30 = "No"; // [Yes, No]
 
 // Main function 
 printMode = (use_print_mode == "Yes") ? true:false;
@@ -75,3 +82,6 @@ if (display_building_blockv15 == "Yes") blockv15(printMode);
 
 if (display_building_plate_30x90 == "Yes") plate15(6, 2, printMode);
 if (display_building_plate_15x90 == "Yes") plate15(6, 1, printMode);
+
+if (display_link15 == "Yes") link(1, printMode);
+if (display_link30 == "Yes") link(2, printMode);
