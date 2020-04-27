@@ -32,14 +32,26 @@ $fn = 20;
 // Print mode
 use_print_mode = "Yes"; // [Yes, No]
 
-// Display Aluminum profile?
-display_alu_profile = "Yes"; // [Yes, No]
+// Display Aluminum 90mm profile?
+display_alu90_profile = "Yes"; // [Yes, No]
+
+// Display Aluminum 120mm profile?
+display_alu120_profile = "Yes"; // [Yes, No]
+
+// Display building block 5?
+display_building_block5 = "Yes"; // [Yes, No]
+
+// Display building block 7.5?
+display_building_block7p5 = "Yes"; // [Yes, No]
 
 // Display building block 15?
 display_building_block15 = "Yes"; // [Yes, No]
 
 // Display building block 30?
 display_building_block30 = "Yes"; // [Yes, No]
+
+// Display building block V15 corner?
+display_building_blockv15 = "Yes"; // [Yes, No]
 
 // Display building plate 30x90?
 display_building_plate_30x90 = "Yes"; // [Yes, No]
@@ -51,10 +63,15 @@ display_building_plate_15x90 = "Yes"; // [Yes, No]
 printMode = (use_print_mode == "Yes") ? true:false;
 
 // Note: Units are multiples of 15mm
-if (display_alu_profile == "Yes") alu_profile15(90/15, printMode);
+if (display_alu90_profile == "Yes") alu_profile15(6, printMode);
+if (display_alu120_profile == "Yes") alu_profile15(8, printMode);
 
+if (display_building_block5 == "Yes") block5(printMode);
+if (display_building_block7p5 == "Yes") block7p5(printMode);
 if (display_building_block15 == "Yes") block15(1, printMode);
 if (display_building_block30 == "Yes") block15(2, printMode);
+
+if (display_building_blockv15 == "Yes") blockv15(printMode);
 
 if (display_building_plate_30x90 == "Yes") plate15(6, 2, printMode);
 if (display_building_plate_15x90 == "Yes") plate15(6, 1, printMode);

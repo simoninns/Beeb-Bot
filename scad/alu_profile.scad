@@ -49,7 +49,7 @@ module profile_end_cap()
     }
 
     // Add a square pin to the top-side
-    move([0,0,1.25]) square_pin(false);
+    move([0,0,1.25]) square_pin();
 
     // Add a cuboid underneath for attachment to profile
     move([0,0,-3]) cuboid([5,5,5], chamfer = 0.5, edges=EDGES_Z_ALL+EDGES_BOTTOM);

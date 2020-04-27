@@ -36,7 +36,7 @@ module render_pin_plate(x_units)
                 cuboid([15,15,2]);
 
                 // Add a pin to the top-side
-                move([0,0,1.5]) square_pin(false);
+                move([0,0,1.5]) square_pin();
             }
         }
     }

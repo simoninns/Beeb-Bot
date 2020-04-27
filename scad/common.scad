@@ -26,18 +26,26 @@ include <BOSL/constants.scad>
 use <BOSL/transforms.scad>
 use <BOSL/shapes.scad>
 
-// Draws a square pin
-// If split is true, a 1mm split is removed from the top of the pin
-module square_pin(split)
+
+module render_pin(xlength)
 {
     difference() {
         union() {
-            move([0,0,-0.125]) rounded_prismoid(size1=[3,3], size2=[3,3], h=0.75, r=0.5, center=true);
-            move([0,0,0.75]) rounded_prismoid(size1=[3,3], size2=[4,4], h=1, r=0.5, center=true);
-            move([0,0,1.875]) cuboid([4,4,1.25], fillet = 0.5, edges=EDGES_Z_ALL+EDGES_TOP);
+            move([0,0,-0.125]) rounded_prismoid(size1=[xlength-1,3], size2=[xlength-1,3], h=0.8, r=0.5, center=true);
+            move([0,0,0.75]) rounded_prismoid(size1=[xlength-1,3], size2=[xlength,4], h=1.125, r=0.5, center=true);
+            move([0,0,1.875]) cuboid([xlength,4,1.25], fillet = 0.5, edges=EDGES_Z_ALL+EDGES_TOP);
         }
-        if (split) rotate([0,0,45]) move([0,0,2.5]) cuboid([6,0.75,2]);
     }
+}
+
+// Draws a square pin
+module square_pin() {
+    render_pin(4);
+}
+
+// Draws a square pin mask
+module square_pin_mask(xlength) {
+    render_pin(xlength);
 }
 
 // Draws a 15x15xlength column
@@ -63,6 +71,4 @@ module column_body(length, cap_mount)
             rotate([180,0,0]) move([0,0,(length / 2) + 3 - 5]) cuboid([5,5,6], chamfer = 0.5, edges=EDGES_Z_ALL+EDGES_BOTTOM);
         }
     }
-
-    
 }
