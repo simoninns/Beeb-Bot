@@ -35,11 +35,14 @@ $fn = 20;
 // Print mode
 use_print_mode = "No"; // [Yes, No]
 
-// Display Aluminum 90mm profile?
+// Display Aluminium 90mm profile?
 display_alu90_profile = "No"; // [Yes, No]
 
-// Display Aluminum 120mm profile?
+// Display Aluminium 120mm profile?
 display_alu120_profile = "No"; // [Yes, No]
+
+// Display Aluminium profile end-cap?
+display_alu_profile_end_cap = "No"; // [Yes, No]
 
 // Display building block 5?
 display_building_block5 = "No"; // [Yes, No]
@@ -83,6 +86,7 @@ printMode = (use_print_mode == "Yes") ? true:false;
 // Note: Units are multiples of 15mm
 if (display_alu90_profile == "Yes") alu_profile15(6, printMode);
 if (display_alu120_profile == "Yes") alu_profile15(8, printMode);
+if (display_alu_profile_end_cap == "Yes") alu_profile_end_cap(printMode);
 
 if (display_building_block5 == "Yes") block5(printMode);
 if (display_building_block7p5 == "Yes") block7p5(printMode);

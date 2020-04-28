@@ -63,8 +63,8 @@ module plate15(x_units, y_units, printMode)
     if (printMode) {
         // Display ready for 3D printing
         move([0,0,1]) {
-            color("red") render_pin_plate(x_units);
-            color("red") render_flat_plate(x_units, y_units);
+            render_pin_plate(x_units);
+            render_flat_plate(x_units, y_units);
         }
 
     } else {

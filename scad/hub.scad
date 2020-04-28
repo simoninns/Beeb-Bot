@@ -95,7 +95,7 @@ module render_hub_top()
             }
 
             move([0,0,6.5]) cyl(h=4.25, d1=9, d2=6);
-            move([0,0,-1.5]) tube(id = 14, od = 14+6.5, h = 2);
+            move([0,0,-1.75]) tube(id = 14, od = 14+6.5, h = 2);
         }
 
         move([0,0,0.5]) {

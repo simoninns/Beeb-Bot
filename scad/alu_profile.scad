@@ -73,16 +73,25 @@ module alu_profile15(y_units, printMode)
 
         // Display ready for 3D printing
         move([0,0,(length / 2) - 2]) {
-            color("lightgrey") column_body(length - 4, true);
+            column_body(length - 4, true);
         }
 
-        color([0.2,0.2,0.2]) move([25,0,5.5]) profile_end_cap();
-        color([0.2,0.2,0.2]) move([25 + 16,0,5.5]) profile_end_cap();
+        //move([25,0,5.5]) profile_end_cap();
+        //move([25 + 16,0,5.5]) profile_end_cap();
     } else {
         // Profile length is -4 as profile caps are 2mm thick
         color("lightgrey") column_body(length - 4, true);
 
         color([0.2,0.2,0.2]) move([0,0,(length / 2) - 1]) profile_end_cap();
         color([0.2,0.2,0.2]) rotate([180,0,0]) move([0,0,(length / 2) - 1]) profile_end_cap();
+    }
+}
+
+module alu_profile_end_cap(printMode)
+{
+    if (printMode) {
+        move([0,0,5.5]) profile_end_cap();
+    } else {
+        color([0.2,0.2,0.2]) move([0,0,5.5]) profile_end_cap();
     }
 }
