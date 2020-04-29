@@ -29,32 +29,7 @@ use <BOSL/involute_gears.scad>
 
 include <common.scad>
 
-// Large Pully Wheel - 60mm diameter, 5.5mm height --------------------------------------------------------------------
-
-module render_large_pulley_wheel()
-{
-
-}
-
-module large_pulley_wheel(printMode)
-{
-
-}
-
-// Cog Wheel Z10, m 1.5 with collett ----------------------------------------------------------------------------------
-
-module render_cog_wheel()
-{
-
-}
-
-module cog_wheel(printMode)
-{
-
-}
-
-// Gear wheel Z30, m 1.5 ----------------------------------------------------------------------------------------------
-
+// Note: The inner hub is common to both the gear_wheel and the large_pulley_wheel
 module inner_hub()
 {
     rotate([0,0,45]) difference() {
@@ -87,6 +62,78 @@ module inner_hub()
     }
 }
 
+// Large Pully Wheel - 60mm diameter, 5.5mm height --------------------------------------------------------------------
+
+module render_grey_axel()
+{
+    rotate([0,0,30]) zrot_copies(rots=[0,60,120,180,240,300], r=16, subrot=true) {
+        move([4.5,0,0]) rotate([0,90,0]) cyl(h=15,d=4,fillet=0.5);
+    }
+}
+
+module render_large_pulley_wheel()
+{
+    difference() {
+        union() {
+            move([0,0,2]) cyl(h=1,d=60, chamfer=0.25);
+            move([0,0,0]) cyl(h=3,d=60 - 4);
+            move([0,0,-2]) cyl(h=1,d=60, chamfer=0.25);
+        }
+
+        // 6x 4mm holes around the circumference of the gear
+        zrot_copies(rots=[0,60,120,180,240,300], r=16, subrot=false) {
+            zcyl(h=6, d=4);
+
+            // Bevel the top and bottom of the hole
+            move([0,0,-2.5]) zcyl(h=.51, d1=5,d2=4);
+            move([0,0,2.5]) zcyl(h=.51, d1=4,d2=5);
+        }
+
+        // Horizontal holes around the edge of the wheel (30 degree offset from vertical holes)
+        rotate([0,0,30]) zrot_copies(rots=[0,60,120,180,240,300], r=16, subrot=true) {
+            move([4.5,0,0]) xcyl(h=15,d=4);
+            move([8.5,0,0]) cuboid([11,3,6]);
+            move([13.5,0,0]) cyl(h=6, d=4);
+        }
+
+        render() zrot_copies(rots=[0,60,120,180,240,300], r=0, subrot=true) {
+            arced_slot(d=44, h=7, sd=4, sa=-18, ea=18);
+        }
+
+        // Add hold for inner hub
+        cyl(h=6, d=25);
+    }
+
+    // Render the inner hub
+    inner_hub();
+}
+
+module large_pulley_wheel(printMode)
+{
+    $fn=60;
+
+    if (printMode) {
+        render_large_pulley_wheel();
+    } else {
+        color("red") render_large_pulley_wheel();
+        color("lightgrey") render_grey_axel();
+    }
+}
+
+// Cog Wheel Z10, m 1.5 with collett ----------------------------------------------------------------------------------
+
+module render_cog_wheel()
+{
+
+}
+
+module cog_wheel(printMode)
+{
+
+}
+
+// Gear wheel Z30, m 1.5 ----------------------------------------------------------------------------------------------
+
 module render_gear_wheel()
 {
     oc1 = 47 - 3; // outer diameter
@@ -96,7 +143,7 @@ module render_gear_wheel()
         gear(mm_per_tooth=cir1/nt1, number_of_teeth=nt1, thickness=5, pressure_angle=25, backlash=0.1, hole_diameter=25);  
 
         // 3x 4mm holes around the circumference of the gear
-        move([0,0,0]) zrot_copies(rots=[0,120,240], r=16, subrot=false) {
+        zrot_copies(rots=[0,120,240], r=16, subrot=false) {
             zcyl(h=6, d=4);
 
             // Bevel the top and bottom of the hole
@@ -131,7 +178,7 @@ module render_gear_wheel()
     }
 
     // Render the inner hub
-    move([0,0,0]) inner_hub();
+    inner_hub();
 }
 
 module gear_wheel(printMode)
