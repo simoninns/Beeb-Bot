@@ -95,19 +95,23 @@ module render_gear_wheel()
     difference() {
         gear(mm_per_tooth=cir1/nt1, number_of_teeth=nt1, thickness=5, pressure_angle=25, backlash=0.1, hole_diameter=25);  
 
+        // 3x 4mm holes around the circumference of the gear
         move([0,0,0]) zrot_copies(rots=[0,120,240], r=16, subrot=false) {
             zcyl(h=6, d=4);
 
+            // Bevel the top and bottom of the hole
             move([0,0,-2.5]) zcyl(h=.51, d1=5,d2=4);
             move([0,0,2.5]) zcyl(h=.51, d1=4,d2=5);
         }
 
-        // These plot really slow... work out why?
-        rotate([0,0,20]) move([0,0,1]) arced_slot(d=32, h=5, sd=3.5, sa=0, ea=80);
-        rotate([0,0,140]) move([0,0,1]) arced_slot(d=32, h=5, sd=3.5, sa=0, ea=80);
-        rotate([0,0,260]) move([0,0,1]) arced_slot(d=32, h=5, sd=3.5, sa=0, ea=80);
+        // The arcs are slow to plot, so use render() to speed up preview
+        render() move([0,0,6 - 4]) {
+            rotate([0,0,20]) arced_slot(d=32, h=7, sd=3.5, sa=0, ea=80);
+            rotate([0,0,140]) arced_slot(d=32, h=7, sd=3.5, sa=0, ea=80);
+            rotate([0,0,260]) arced_slot(d=32, h=7, sd=3.5, sa=0, ea=80);
+        }
 
-        // Upper bevel edge
+        // Upper bevel edge (on gear teeth)
         move([0,0,2]) {
             difference() {
                 move([0,0,0.1]) cyl(h=1.1, d=47);
@@ -116,7 +120,7 @@ module render_gear_wheel()
             }
         }
 
-        // Lower bevel edge
+        // Lower bevel edge (on gear teeth)
         rotate([0,180,0]) move([0,0,2]) {
             difference() {
                 move([0,0,0.1]) cyl(h=1.1, d=47);
@@ -126,7 +130,7 @@ module render_gear_wheel()
         }
     }
 
-    // Add the inner hub
+    // Render the inner hub
     move([0,0,0]) inner_hub();
 }
 
