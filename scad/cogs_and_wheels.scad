@@ -64,10 +64,17 @@ module inner_hub()
 
 // Large Pully Wheel - 60mm diameter, 5.5mm height --------------------------------------------------------------------
 
-module render_grey_axel()
+module render_grey_axle(displayMode)
 {
-    rotate([0,0,30]) zrot_copies(rots=[0,60,120,180,240,300], r=33.5 - 16, subrot=true) {
-        move([4.5,0,0]) rotate([0,90,0]) cyl(h=15,d=4,fillet=0.5);
+    if (displayMode) {
+        rotate([0,0,30]) zrot_copies(rots=[0,60,120,180,240,300], r=33.5 - 16, subrot=true) {
+            move([4.5,0,0]) rotate([0,90,0]) cyl(h=15,d=4,fillet2=0.5);
+        }
+    } else {
+        for(xpos = [0:4.5:7*4.5]) {
+            move([xpos,0,0]) cyl(h=15,d=4,fillet2=0.5);
+        }
+        move([15,0,-(15/2) + (1.2/2)]) cuboid([7*4.5,0.6,1.2]);
     }
 }
 
@@ -122,7 +129,16 @@ module large_pulley_wheel(printMode)
         render_large_pulley_wheel();
     } else {
         color("red") render_large_pulley_wheel();
-        color("lightgrey") render_grey_axel();
+        color("lightgrey") render_grey_axle(true);
+    }
+}
+
+module grey_axle(printMode)
+{
+    if (printMode) {
+        move([0,0,7.5]) render_grey_axle(false);
+    } else {
+        color("lightgrey") render_grey_axle(false);
     }
 }
 
