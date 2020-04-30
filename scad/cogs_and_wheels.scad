@@ -46,15 +46,15 @@ module inner_hub()
                 rotate([0,0,-45]) cuboid([30,5,5]);
             }
 
-            move([0,0,0]) tube(h = 5, od=25, id=22, center=true);
+            move([0,0,0]) tube(h = 5, od=25.5, id=22, center=true);
         }
 
-        move([0,0,1]) cyl(h=1, d1=22, d2=25);
-        move([0,0,2.5]) cyl(h=2.1, d=25);
+        move([0,0,1]) cyl(h=1, d1=22, d2=25.5);
+        move([0,0,2.5]) cyl(h=2.1, d=25.5);
 
         rotate([0,180,0]){
-            move([0,0,1]) cyl(h=1, d1=22, d2=25);
-            move([0,0,2.5]) cyl(h=2.1, d=25);
+            move([0,0,1]) cyl(h=1, d1=22, d2=25.5);
+            move([0,0,2.5]) cyl(h=2.1, d=25.5);
         }
 
         rotate([0,0,45]) cuboid([30,3,6]);
@@ -66,22 +66,27 @@ module inner_hub()
 
 module render_grey_axel()
 {
-    rotate([0,0,30]) zrot_copies(rots=[0,60,120,180,240,300], r=16, subrot=true) {
+    rotate([0,0,30]) zrot_copies(rots=[0,60,120,180,240,300], r=33.5 - 16, subrot=true) {
         move([4.5,0,0]) rotate([0,90,0]) cyl(h=15,d=4,fillet=0.5);
     }
 }
 
 module render_large_pulley_wheel()
 {
+    width = 61.5;
+    groove = 4;
+
     difference() {
         union() {
-            move([0,0,2]) cyl(h=1,d=60, chamfer=0.25);
-            move([0,0,0]) cyl(h=3,d=60 - 4);
-            move([0,0,-2]) cyl(h=1,d=60, chamfer=0.25);
+            move([0,0,2]) cyl(h=1,d=width, chamfer1 = 0, chamfer2 = 0.5);
+            move([0,0,1]) cyl(h=1, d1=width - groove, d2=width);
+            move([0,0,0]) cyl(h=3,d=width - groove);
+            move([0,0,-1]) cyl(h=1, d1=width, d2=width - groove);
+            move([0,0,-2]) cyl(h=1,d=width, chamfer1 = 0.5, chamfer2 = 0);
         }
 
         // 6x 4mm holes around the circumference of the gear
-        zrot_copies(rots=[0,60,120,180,240,300], r=16, subrot=false) {
+        zrot_copies(rots=[0,60,120,180,240,300], r=33/2, subrot=false) {
             zcyl(h=6, d=4);
 
             // Bevel the top and bottom of the hole
@@ -89,19 +94,20 @@ module render_large_pulley_wheel()
             move([0,0,2.5]) zcyl(h=.51, d1=4,d2=5);
         }
 
-        // Horizontal holes around the edge of the wheel (30 degree offset from vertical holes)
-        rotate([0,0,30]) zrot_copies(rots=[0,60,120,180,240,300], r=16, subrot=true) {
-            move([4.5,0,0]) xcyl(h=15,d=4);
-            move([8.5,0,0]) cuboid([11,3,6]);
-            move([13.5,0,0]) cyl(h=6, d=4);
-        }
-
         render() zrot_copies(rots=[0,60,120,180,240,300], r=0, subrot=true) {
-            arced_slot(d=44, h=7, sd=4, sa=-18, ea=18);
+            arced_slot(d=42 + 2.5, h=7, sd=4, sa=-17.5, ea=17.5);
         }
 
-        // Add hold for inner hub
-        cyl(h=6, d=25);
+        // Horizontal holes around the edge of the wheel (30 degree offset from vertical holes)
+        rotate([0,0,30]) zrot_copies(rots=[0,60,120,180,240,300], r=39.5 - (15 + 2.5), subrot=true) {
+            move([0,0,0]) xcyl(h=15,d=4);
+            move([15.5 - 11,0,0]) cuboid([13,3,6]); // Distance is 11mm
+            move([7.5,0,0]) cyl(h=6, d=4);
+            move([8.5,0,0]) cuboid([2,4,6]);
+        }
+
+        // Add hole for inner hub
+        cyl(h=6, d=25.5);
     }
 
     // Render the inner hub
@@ -136,14 +142,14 @@ module cog_wheel(printMode)
 
 module render_gear_wheel()
 {
-    oc1 = 47 - 3; // outer diameter
+    oc1 = 47 - 2; // outer diameter
     cir1 = 2 * 3.1415927 * (oc1 / 2);
     nt1 = 30; // number of teeth
     difference() {
-        gear(mm_per_tooth=cir1/nt1, number_of_teeth=nt1, thickness=5, pressure_angle=25, backlash=0.1, hole_diameter=25);  
+        rotate([0,0,7.5]) gear(mm_per_tooth=cir1/nt1, number_of_teeth=nt1, thickness=5, pressure_angle=20, backlash=0.1, hole_diameter=25.5);  
 
         // 3x 4mm holes around the circumference of the gear
-        zrot_copies(rots=[0,120,240], r=16, subrot=false) {
+        zrot_copies(rots=[0,120,240], r=33/2, subrot=false) {
             zcyl(h=6, d=4);
 
             // Bevel the top and bottom of the hole
@@ -153,26 +159,26 @@ module render_gear_wheel()
 
         // The arcs are slow to plot, so use render() to speed up preview
         render() move([0,0,6 - 4]) {
-            rotate([0,0,20]) arced_slot(d=32, h=7, sd=3.5, sa=0, ea=80);
-            rotate([0,0,140]) arced_slot(d=32, h=7, sd=3.5, sa=0, ea=80);
-            rotate([0,0,260]) arced_slot(d=32, h=7, sd=3.5, sa=0, ea=80);
+            rotate([0,0,20]) arced_slot(d=33, h=7, sd=3.5, sa=0, ea=80);
+            rotate([0,0,140]) arced_slot(d=33, h=7, sd=3.5, sa=0, ea=80);
+            rotate([0,0,260]) arced_slot(d=33, h=7, sd=3.5, sa=0, ea=80);
         }
 
         // Upper bevel edge (on gear teeth)
         move([0,0,2]) {
             difference() {
-                move([0,0,0.1]) cyl(h=1.1, d=47);
-                cyl(h=1, d1=47, d2=40.5);
-                cyl(h=1, d=40.5);
+                move([0,0,0.1]) cyl(h=1.1, d=48.25);
+                cyl(h=1, d1=48.25, d2=41.35);
+                cyl(h=1, d=41.35);
             }
         }
 
         // Lower bevel edge (on gear teeth)
         rotate([0,180,0]) move([0,0,2]) {
             difference() {
-                move([0,0,0.1]) cyl(h=1.1, d=47);
-                cyl(h=1, d1=47, d2=40.5);
-                cyl(h=1, d=40.5);
+                move([0,0,0.1]) cyl(h=1.1, d=48.25);
+                cyl(h=1, d1=48.25, d2=41.35);
+                cyl(h=1, d=41.35);
             }
         }
     }
