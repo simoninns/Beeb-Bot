@@ -36,7 +36,7 @@ module render_switch_plunger()
             move([0,0,6.5]) rounded_prismoid(size1=[12,4.5], size2=[2,4.5], h=3, r=0.5, center=true);
 
             // Add a catch for the switch
-            move([6,0,-0.5]) rotate([0,-90,0]) rounded_prismoid(size1=[0.5,4.5], size2=[3,4.5], h=1, r=0.5, center=true);
+            move([6,0,0.5]) rotate([0,-90,0]) rounded_prismoid(size1=[0.5,4.5], size2=[3,4.5], h=2, r=0.5, center=true);
         }
 
         // Make space for the spring holder

@@ -33,9 +33,9 @@ module render_link(length)
 {
     difference() {
         union() {
-            move([0,0,0]) xcyl(h=length, d=4);
+            move([0,0,0]) xcyl(h=length, d=3.8);
             move([0,0,1.5]) cuboid([length,3,3]);
-            move([0,0,4]) xcyl(h=length, d=4);
+            move([0,0,4]) xcyl(h=length, d=3.8);
         }
 
         // Slice base
