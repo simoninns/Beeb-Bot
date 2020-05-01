@@ -29,6 +29,7 @@ include <link.scad>
 include <hub.scad>
 include <hinge.scad>
 include <cogs_and_wheels.scad>
+include <mini_switch.scad>
 
 // Rendering quality
 $fn = 20;
@@ -37,7 +38,7 @@ $fn = 20;
 use_print_mode = "No"; // [Yes, No]
 
 // Choose the item to display
-choose_item = "alu90"; // [alu90, alu120, alu_end_cap, block5, block7p5, block15, block30, blockv15, plate30x90, plate15x90, link15, link30, hinge, hub_base, hub_top, large_pulley_wheel, grey_axle, cog_wheel, gear_wheel, locking_washer]
+choose_item = "alu90"; // [alu90, alu120, alu_end_cap, block5, block7p5, block15, block30, blockv15, plate30x90, plate15x90, link15, link30, hinge, hub_base, hub_top, large_pulley_wheel, grey_axle, cog_wheel, gear_wheel, locking_washer, mini_switch, mini_switch_plunger, mini_switch_base, mini_switch_top]
 
 // Main function 
 printMode = (use_print_mode == "Yes") ? true:false;
@@ -75,3 +76,8 @@ if (choose_item == "grey_axle") grey_axle(printMode);
 if (choose_item == "cog_wheel") cog_wheel(printMode);
 if (choose_item == "gear_wheel") gear_wheel(printMode);
 if (choose_item == "locking_washer") locking_washer(printMode);
+
+// Electronics
+if (choose_item == "mini_switch_plunger") mini_switch_plunger(printMode);
+if (choose_item == "mini_switch_base") mini_switch_base(printMode);
+if (choose_item == "mini_switch_top") mini_switch_top(printMode);

@@ -72,3 +72,21 @@ module column_body(length, cap_mount)
         }
     }
 }
+
+// Draws a V-profile joiner as found on the switches and electronic parts
+module v_profile(vlength)
+{
+    difference() {
+        union() {
+            cuboid([vlength,1,2.8]);
+
+            move([0,1.5,-1.2]) rotate([74,0,0]) cuboid([vlength,1,3.25]);
+            move([0,1.5,1.2]) rotate([-74,0,0]) cuboid([vlength,1,3.25]);
+
+            move([0,2,-1.25]) rotate([0,90,0]) cyl(h=vlength, d=1.5);
+            move([0,2,1.25]) rotate([0,90,0]) cyl(h=vlength, d=1.5);
+        }
+        move([0,2.75,0]) cuboid([vlength+1,1,6]);
+        move([0,2,0]) cuboid([vlength + 1, 1, 1.4]);   
+    }
+}
