@@ -133,6 +133,8 @@ module large_pulley_wheel(printMode)
     }
 }
 
+// The grey axles are decoration pieces that go around the
+// outside edge of the large pulley wheel
 module grey_axle(printMode)
 {
     if (printMode) {
@@ -140,18 +142,6 @@ module grey_axle(printMode)
     } else {
         color("lightgrey") render_grey_axle(false);
     }
-}
-
-// Cog Wheel Z10, m 1.5 with collett ----------------------------------------------------------------------------------
-
-module render_cog_wheel()
-{
-
-}
-
-module cog_wheel(printMode)
-{
-
 }
 
 // Gear wheel Z30, m 1.5 ----------------------------------------------------------------------------------------------
@@ -214,14 +204,113 @@ module gear_wheel(printMode)
     }
 }
 
-// 4mm axel locking washer --------------------------------------------------------------------------------------------
+// Cog Wheel Z10, m 1.5 with collett ----------------------------------------------------------------------------------
 
-module render_locking_washer()
+module render_cog_wheel()
 {
 
 }
 
-module locking_washer(printMode)
+// Note: This is the piece designed to fit to the shaft of the original stepper-motors
+module cog_wheel(printMode)
 {
 
+}
+
+// 4mm axel locking washer --------------------------------------------------------------------------------------------
+
+module render_locking_washer()
+{
+    difference() {
+        union() {
+            oc1 = 11 - 1; // outer diameter
+            cir1 = 2 * 3.1415927 * (oc1 / 2);
+            nt1 = 16; // number of teeth
+
+            gear(mm_per_tooth=cir1/nt1, number_of_teeth=nt1, thickness=2, pressure_angle=1, backlash=0.01, hole_diameter=4);
+            cyl(h=2,d=9.5);
+        }
+
+        cyl(h=3,d=4);
+        cuboid([6,3,4]);
+        move([0,0,1]) cyl(h=1, d=6);
+    }
+
+    difference() {
+        union() {
+            move([2.5,1.75,0.75]) cyl(h=1, d=1);
+            move([-2.5,1.75,0.75]) cyl(h=1, d=1);
+            move([2.5,-1.75,0.75]) cyl(h=1, d=1);
+            move([-2.5,-1.75,0.75]) cyl(h=1, d=1);
+        }
+
+        cuboid([6,3,4]);
+    }
+}
+
+module locking_washer(printMode)
+{
+    if (printMode) {
+        $fn=60;
+        render_locking_washer();
+    } else {
+        color("red") render_locking_washer();
+    }
+}
+
+// V-axel -------------------------------------------------------------------------------------------------------------
+
+module single_vaxle()
+{
+    difference() {
+        union() {
+            cyl(h=17, d=4);
+            move([0,0,(17/2 - 0.5)]) cyl(h=1,d=4.5, chamfer1=0.25);
+            move([0,0,-(17/2 - 0.5)]) cyl(h=1,d=4.5, chamfer2=0.25);
+        }
+
+        move([0,0,(17/2 - 2)]) cuboid([6,1,6], chamfer=0.25);
+        move([0,0,-(17/2 - 2)]) cuboid([6,1,6], chamfer=0.25);
+    }
+}
+
+// Render 6 V axles
+module render_vaxle()
+{
+    for(ypos = [0:5:5*5]) {
+        move([0,ypos,0]) single_vaxle();
+    }
+}
+
+module vaxle(printMode)
+{
+    if (printMode) {
+        $fn=9;
+        move([0,0,2]) rotate([0,-90,0]) render_vaxle();
+    } else {
+        $fn=9;
+        color("red") render_vaxle();
+    }
+}
+
+// Clip 10 ------------------------------------------------------------------------------------------------------------
+
+module render_clip10()
+{
+    difference() {
+        cyl(h=10, d=7.5);
+        cyl(h=11, d=4);
+        move([2.5,0,0]) cuboid([3,3,12]);
+        move([3.75,0,0]) cuboid([2,8,12]);
+        move([-3,0,5.5]) cuboid([4,1,3]);
+    }    
+}
+
+module clip10(printMode)
+{
+    if (printMode) {
+        move([0,0,5]) render_clip10();
+    } else {
+        color("red") render_clip10();
+    }
 }
