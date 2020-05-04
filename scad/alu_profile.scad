@@ -75,15 +75,16 @@ module alu_profile15(y_units, printMode)
         move([0,0,(length / 2) - 2]) {
             column_body(length - 4, true);
         }
-
-        //move([25,0,5.5]) profile_end_cap();
-        //move([25 + 16,0,5.5]) profile_end_cap();
     } else {
         // Profile length is -4 as profile caps are 2mm thick
         color("lightgrey") column_body(length - 4, true);
 
-        color([0.2,0.2,0.2]) move([0,0,(length / 2) - 1]) profile_end_cap();
-        color([0.2,0.2,0.2]) rotate([180,0,0]) move([0,0,(length / 2) - 1]) profile_end_cap();
+        // The -.75 moves the end caps to the right position...
+        // I need to figure out why this prints 1mm longer than
+        // the model (probably due to the tolerance on the underside
+        // of the end caps).
+        color([0.2,0.2,0.2]) move([0,0,(length / 2) - .75]) profile_end_cap();
+        color([0.2,0.2,0.2]) rotate([180,0,0]) move([0,0,(length / 2) - .75]) profile_end_cap();
     }
 }
 
