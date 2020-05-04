@@ -26,6 +26,8 @@ include <BOSL/constants.scad>
 use <BOSL/transforms.scad>
 use <BOSL/shapes.scad>
 use <BOSL/involute_gears.scad>
+use <BOSL/threading.scad>
+use <BOSL/metric_screws.scad>
 
 include <common.scad>
 
@@ -208,32 +210,93 @@ module gear_wheel(printMode)
 
 module render_cog_gear()
 {
-    oc1 = 17 - 2.75; // outer diameter
+    oc1 = 17 - 2.5; // outer diameter
     cir1 = 2 * 3.1415927 * (oc1 / 2);
     nt1 = 10; // number of teeth
-    rotate([0,0,7.5]) gear(mm_per_tooth=cir1/nt1, number_of_teeth=nt1, thickness=5, pressure_angle=20, backlash=0.1, hole_diameter=4);
+    difference() {
+        rotate([0,0,7.5]) gear(mm_per_tooth=cir1/nt1, number_of_teeth=nt1, thickness=5, pressure_angle=20, backlash=0.1, hole_diameter=0);
 
-    // Bevel the top and bottom of the hole
-    //move([0,0,-2.5]) zcyl(h=.51, d1=5,d2=4);
-    //move([0,0,2.5]) zcyl(h=.51, d1=4,d2=5);
+        move([0,0,2]) {
+            difference() {
+                move([0,0,0.1]) cyl(h=1.1, d=18);
+                cyl(h=1, d1=18, d2=10.75);
+                cyl(h=1, d=10.75);
+            }
+        }
+
+        rotate([0,180,0]) move([0,0,2]) {
+            difference() {
+                move([0,0,0.1]) cyl(h=1.1, d=18);
+                cyl(h=1, d1=18, d2=10.75);
+                cyl(h=1, d=10.75);
+            }
+        }
+    }
 }
 
-module render_cog_wheel()
+module render_cog_wheel_top()
 {
-    render_cog_gear();
+    difference() {
+        union() {
+            render_cog_gear();
+            move([0,0,-4.75]) cyl(h=9.5+5, d=11);
+        }
 
-    move([0,0,-7.5]) cyl(h=10, d=11);
+        // add 4mm axle hole
+        move([0,0,-5]) cyl(h=20, d=4.1);
+
+        // Add a thread
+        move([0,0,-9.25]) threaded_rod(d=9, l=6.1, pitch=get_metric_iso_fine_thread_pitch(9), orient=ORIENT_Z, internal=true);
+
+        // Add profile for the collettes
+        move([0,0,-9.25 + 7]) cyl(h=15-6 - 1, d1=8.5, d2=6);
+    }
 }
 
 // Note: This is the piece designed to fit to the shaft of the original stepper-motors
-module cog_wheel(printMode)
+module cog_wheel_top(printMode)
 {
     $fn=60;
 
     if (printMode) {
-        render_cog_wheel();
+        rotate([0,180,0]) move([0,0,-2.5]) render_cog_wheel_top();
     } else {
-        color([0.2,0.2,0.2]) render_cog_wheel();
+        color([0.2,0.2,0.2]) render_cog_wheel_top();
+    }
+}
+
+module render_cog_wheel_bottom()
+{
+    difference() {
+        union() {
+            oc1 = 11 - 1; // outer diameter
+            cir1 = 2 * 3.1415927 * (oc1 / 2);
+            nt1 = 16; // number of teeth
+
+            gear(mm_per_tooth=cir1/nt1, number_of_teeth=nt1, thickness=5, pressure_angle=1, backlash=0.01, hole_diameter=4);
+            cyl(h=5,d=9.5);
+
+            move([0,0,-5.5]) threaded_rod(d=9, l=6.0, pitch=get_metric_iso_fine_thread_pitch(9), orient=ORIENT_Z, internal=false);
+            move([0,0,-12.5]) cyl(h=8, d2=7.5, d1=6);
+        }
+
+        // add 4mm axle hole
+        move([0,0,-7]) cyl(h=25, d=4.1);
+
+        // Add split
+        move([0,0,-10]) cuboid([1,10,15]);
+    }
+}
+
+// Note: This is the piece designed to fit to the shaft of the original stepper-motors
+module cog_wheel_bottom(printMode)
+{
+    $fn=60;
+
+    if (printMode) {
+        rotate([0,180,0]) move([0,0,-2.5]) render_cog_wheel_bottom();
+    } else {
+        color("red") render_cog_wheel_bottom();
     }
 }
 
