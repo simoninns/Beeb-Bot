@@ -31,6 +31,7 @@ include <hinge.scad>
 include <cogs_and_wheels.scad>
 include <mini_switch.scad>
 include <caster_ball.scad>
+include <chain.scad>
 
 // Rendering quality
 $fn = 20;
@@ -39,7 +40,7 @@ $fn = 20;
 use_print_mode = "No"; // [Yes, No]
 
 // Choose the item to display
-choose_item = "alu90";  // [alu90, alu120, alu_end_cap, block5, block7p5, block15, block30, blockv15, plate30x90, plate15x90, link15, link30, hinge, hub_base, hub_top, large_pulley_wheel, grey_axle, cog_wheel, gear_wheel, locking_washer, v_axle, clip10, mini_switch_plunger, mini_switch_base, mini_switch_top, caster_ball_holder, caster_ball_base, caster_ball_top]
+choose_item = "alu90";  // [alu90, alu120, alu_end_cap, block5, block7p5, block15, block30, blockv15, plate30x90, plate15x90, link15, link30, hinge, hub_base, hub_top, large_pulley_wheel, grey_axle, cog_wheel, gear_wheel, locking_washer, v_axle, clip10, mini_switch_plunger, mini_switch_base, mini_switch_top, caster_ball_holder, caster_ball_base, caster_ball_top, chain]
 
 // Main function 
 printMode = (use_print_mode == "Yes") ? true:false;
@@ -89,3 +90,6 @@ if (choose_item == "mini_switch_top") mini_switch_top(printMode);
 if (choose_item == "caster_ball_holder") caster_ball_holder(printMode);
 if (choose_item == "caster_ball_base") caster_ball_base(printMode);
 if (choose_item == "caster_ball_top") caster_ball_top(printMode);
+
+// Chain
+if (choose_item == "chain") chain(printMode);

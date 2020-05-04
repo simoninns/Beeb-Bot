@@ -206,15 +206,35 @@ module gear_wheel(printMode)
 
 // Cog Wheel Z10, m 1.5 with collett ----------------------------------------------------------------------------------
 
+module render_cog_gear()
+{
+    oc1 = 17 - 2.75; // outer diameter
+    cir1 = 2 * 3.1415927 * (oc1 / 2);
+    nt1 = 10; // number of teeth
+    rotate([0,0,7.5]) gear(mm_per_tooth=cir1/nt1, number_of_teeth=nt1, thickness=5, pressure_angle=20, backlash=0.1, hole_diameter=4);
+
+    // Bevel the top and bottom of the hole
+    //move([0,0,-2.5]) zcyl(h=.51, d1=5,d2=4);
+    //move([0,0,2.5]) zcyl(h=.51, d1=4,d2=5);
+}
+
 module render_cog_wheel()
 {
+    render_cog_gear();
 
+    move([0,0,-7.5]) cyl(h=10, d=11);
 }
 
 // Note: This is the piece designed to fit to the shaft of the original stepper-motors
 module cog_wheel(printMode)
 {
+    $fn=60;
 
+    if (printMode) {
+        render_cog_wheel();
+    } else {
+        color([0.2,0.2,0.2]) render_cog_wheel();
+    }
 }
 
 // 4mm axel locking washer --------------------------------------------------------------------------------------------
