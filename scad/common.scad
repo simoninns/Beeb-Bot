@@ -26,8 +26,23 @@ include <BOSL/constants.scad>
 use <BOSL/transforms.scad>
 use <BOSL/shapes.scad>
 
-
 module render_pin(xlength)
+{
+    difference() {
+        union() {
+            move([0,0,-0.125]) rounded_prismoid(size1=[xlength-1,3], size2=[xlength-1,3], h=0.8, r=0.5, center=true);
+            move([0,0,0.75]) rounded_prismoid(size1=[xlength-1,3], size2=[xlength,3.8], h=1.125, r=0.5, center=true);
+            move([0,0,1.875]) cuboid([xlength,3.8,1.25], fillet = 0.5, edges=EDGES_Z_ALL+EDGES_TOP);
+        }
+    }
+}
+
+// Draws a square pin
+module square_pin() {
+    render_pin(4);
+}
+
+module render_pin_mask(xlength)
 {
     difference() {
         union() {
@@ -38,14 +53,9 @@ module render_pin(xlength)
     }
 }
 
-// Draws a square pin
-module square_pin() {
-    render_pin(4);
-}
-
 // Draws a square pin mask
 module square_pin_mask(xlength) {
-    render_pin(xlength);
+    render_pin_mask(xlength);
 }
 
 // Draws a 15x15xlength column
