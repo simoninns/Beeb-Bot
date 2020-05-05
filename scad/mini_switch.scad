@@ -169,7 +169,7 @@ module mini_switch_base(printMode)
         render_switch_case_base();
     } else {
         color("lightgrey") render_switch_case_base();
-        move([3,0,0]) rotate([90,90,180]) render_micro_switch();
+        //move([3,0,0]) rotate([90,90,180]) render_micro_switch();
     }
 }
 
