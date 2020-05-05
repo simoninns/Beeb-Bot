@@ -31,6 +31,20 @@ include <alu_profile.scad>
 
 module render_cover()
 {
+    difference() {
+        cuboid([123,123,30], chamfer=2, edges=EDGES_ALL-EDGES_BOTTOM); 
+        
+        move([0,0,-2]) cuboid([121,121,30], chamfer=2, edges=EDGES_ALL-EDGES_BOTTOM);
+        move([0,0,-5]) cuboid([97,125,30], fillet=5, edges=EDGES_Y_ALL);
+    }
+
+    // Frame clips
+    move([60.5,0,-13.25 + 3]) cuboid([2,38,3.5], chamfer=1);
+    move([-60.5,0,-13.25 + 3]) cuboid([2,38,3.5], chamfer=1);
+
+    // Frame clips
+    move([60.5,0,-13.25 + 3]) cuboid([2,38,3.5], chamfer=1);
+    move([-60.5,0,-13.25 + 3]) cuboid([2,38,3.5], chamfer=1);
 }
 
 module cover(printMode)
@@ -38,6 +52,6 @@ module cover(printMode)
     if (printMode) {
         move([0,0,5]) render_cover();
     } else {
-        render_cover();
+        color("white") render_cover();
     }
 }

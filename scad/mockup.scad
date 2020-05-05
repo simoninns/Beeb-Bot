@@ -34,6 +34,7 @@ include <mini_switch.scad>
 include <hinge.scad>
 include <hub.scad>
 include <cogs_and_wheels.scad>
+include <cover.scad>
 
 module mock_frame()
 {
@@ -235,7 +236,7 @@ module mock_motor_mounts()
 module mock_motor()
 {
     $fn=60; 
-    
+
     color("DarkKhaki") {
         // Body
         cyl(h=33.5 - 1.5, d=56.3);
@@ -312,6 +313,11 @@ module mock_pcb_holders()
     move([-45-7.5,45 + 7.5,45+7.5 + 2.5]) rotate([0,0,90]) block5(false);
 }
 
+module mock_cover()
+{
+    move([0,0,45 + 1 + 7.5]) cover(false);
+}
+
 module render_mock_up()
 {
     mock_frame();
@@ -322,6 +328,7 @@ module render_mock_up()
     mock_motor_mounts();
     mock_drive_motors();
     mock_pcb_holders();
+    mock_cover();
 }
 
 module mock_up()
