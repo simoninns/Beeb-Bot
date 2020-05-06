@@ -63,7 +63,7 @@ module render_profile_end_cap(multiple)
     } else {
         for (ypos = [0:(multiple / 7) - 1]) {
             for(xpos = [0:(multiple / 4) - 1]) {
-                move([xpos * 18,ypos*18,0]) {
+                move([xpos * 17,ypos*17,0]) {
                     render_single_profile_end_cap();
                 }
             }
