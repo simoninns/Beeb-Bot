@@ -33,18 +33,18 @@ include <mini_switch.scad>
 include <caster_ball.scad>
 include <chain.scad>
 include <cover.scad>
-include <mockup.scad>
+include <assemblies.scad>
 
 /* [Main] */
-// Display the assembly guide?
-display_mockup = false;
+// What should be displayed?
+display_mode = "Parts"; // [Parts, Assembly steps]
 
 /* [Parts] */
 // Display parts ready for printing?
 printMode = false;
 
 // Aluminium profiles:
-choose_alu = "None"; // [None, 90mm Profile, 120mm Profile, End cap]
+choose_alu = "None"; // [None, 90mm Profile, 120mm Profile, End cap, End cap x28]
 
 // Blocks:
 choose_block = "None"; // [None, 5mm Block, 7.5mm Block, 15mm Block, 30mm Block, V15 Block]
@@ -76,17 +76,22 @@ choose_chain = "None"; // [None, Drive chain]
 // Cover:
 choose_cover = "None"; // [None, Cover]
 
-// Main function
+/* [Assembly guide] */
+// Display a sub-assembly:
+choose_sub_assembly = "None"; // [None, 1 - Lower front cross member, 2 - Lower side members, 3 - Front vertical legs, 4 - Rear vertical legs, 5 - Upper side members, 6 - Upper front and rear cross members, 7 - Rear lower member, 8 - Rear caster support, 9 - Driving wheels assembly, 10 - Ball caster assembly, 11 - Front bumper assembly, 12 - Motors and gears, 13 - PCB supports, Complete]
+
+// Main function module
 module main()
 {
-    if (!display_mockup) {
+    if (display_mode == "Parts") {
         // Rendering quality
         $fn = 20;
 
         // Aluminium profiles
         if (choose_alu == "90mm Profile") alu_profile15(6, printMode);
         if (choose_alu == "120mm Profile") alu_profile15(8, printMode);
-        if (choose_alu == "End cap") alu_profile_end_cap(printMode);
+        if (choose_alu == "End cap") alu_profile_end_cap(printMode, 1);
+        if (choose_alu == "End cap x28") alu_profile_end_cap(printMode, 28);
 
         // Blocks
         if (choose_block == "5mm Block") block5(printMode);
@@ -135,8 +140,25 @@ module main()
 
         // Cover
         if (choose_cover == "Cover") cover(printMode);
-    } else {
-        mock_up();
+    }
+
+    // Display sub-assemblies (according to the original BBC Buggy assembly manual)
+    if (display_mode == "Assembly steps") {
+        if (choose_sub_assembly == "1 - Lower front cross member") sub_assembly_1(true);
+        if (choose_sub_assembly == "2 - Lower side members") sub_assembly_2(true);
+        if (choose_sub_assembly == "3 - Front vertical legs") sub_assembly_3(true);
+        if (choose_sub_assembly == "4 - Rear vertical legs") sub_assembly_4(true);
+        if (choose_sub_assembly == "5 - Upper side members") sub_assembly_5(true);
+        if (choose_sub_assembly == "6 - Upper front and rear cross members") sub_assembly_6(true);
+        if (choose_sub_assembly == "7 - Rear lower member") sub_assembly_7(true);
+        if (choose_sub_assembly == "8 - Rear caster support") sub_assembly_8(true);
+        if (choose_sub_assembly == "9 - Driving wheels assembly") sub_assembly_9(true);
+        if (choose_sub_assembly == "10 - Ball caster assembly") sub_assembly_10(true);
+        if (choose_sub_assembly == "11 - Front bumper assembly") sub_assembly_11(true);
+        if (choose_sub_assembly == "12 - Motors and gears") sub_assembly_12(true);
+        if (choose_sub_assembly == "13 - PCB supports") sub_assembly_13(true);
+
+        if (choose_sub_assembly == "Complete") sub_assembly_complete();
     }
 }
 

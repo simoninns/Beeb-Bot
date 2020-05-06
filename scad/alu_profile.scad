@@ -31,7 +31,7 @@ include <common.scad>
 // Draws an aluminium profile end cap
 // Note: end cap is 1.5mm high to allow for tollerances once
 // the piece is assembled (should be 2mm)
-module profile_end_cap()
+module render_single_profile_end_cap()
 {
     difference() {
         cuboid([15,15,1.5], chamfer=0.5, edges=EDGES_Z_ALL+EDGES_TOP);
@@ -55,13 +55,29 @@ module profile_end_cap()
     move([0,0,-3]) cuboid([5,5,5], chamfer = 0.5, edges=EDGES_Z_ALL+EDGES_BOTTOM);
 }
 
+// Display either 1 or 28 end caps in 4 rows of 7
+module render_profile_end_cap(multiple)
+{
+    if (multiple < 2) {
+        render_single_profile_end_cap();
+    } else {
+        for (ypos = [0:(multiple / 7) - 1]) {
+            for(xpos = [0:(multiple / 4) - 1]) {
+                move([xpos * 18,ypos*18,0]) {
+                    render_single_profile_end_cap();
+                }
+            }
+        }
+    }
+}
+
 module render_alu_profile(length)
 {
     // Profile length is -4 as profile caps are 2mm thick
     color("lightgrey") column_body(length - 4, true);
 
-    color([0.2,0.2,0.2]) move([0,0,(length / 2) - 1]) profile_end_cap();
-    color([0.2,0.2,0.2]) rotate([180,0,0]) move([0,0,(length / 2) - 1]) profile_end_cap();
+    color([0.2,0.2,0.2]) move([0,0,(length / 2) - 1]) render_profile_end_cap(1);
+    color([0.2,0.2,0.2]) rotate([180,0,0]) move([0,0,(length / 2) - 1]) render_profile_end_cap(1);
 }
 
 module alu_profile15(y_units, printMode)
@@ -83,16 +99,16 @@ module alu_profile15(y_units, printMode)
         // I need to figure out why this prints 1mm longer than
         // the model (probably due to the tolerance on the underside
         // of the end caps).
-        color([0.2,0.2,0.2]) move([0,0,(length / 2) - .75]) profile_end_cap();
-        color([0.2,0.2,0.2]) rotate([180,0,0]) move([0,0,(length / 2) - .75]) profile_end_cap();
+        color([0.2,0.2,0.2]) move([0,0,(length / 2) - .75]) render_profile_end_cap(1);
+        color([0.2,0.2,0.2]) rotate([180,0,0]) move([0,0,(length / 2) - .75]) render_profile_end_cap(1);
     }
 }
 
-module alu_profile_end_cap(printMode)
+module alu_profile_end_cap(printMode, multiple)
 {
     if (printMode) {
-        move([0,0,5.5]) profile_end_cap();
+        move([0,0,5.5]) render_profile_end_cap(multiple);
     } else {
-        color([0.2,0.2,0.2]) move([0,0,5.5]) profile_end_cap();
+        color([0.2,0.2,0.2]) move([0,0,5.5]) render_profile_end_cap(multiple);
     }
 }
