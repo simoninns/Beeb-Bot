@@ -26,31 +26,25 @@ include <BOSL/constants.scad>
 use <BOSL/transforms.scad>
 use <BOSL/shapes.scad>
 
+// Note: The pin is 0.2mm smaller than the pin mask
+// So a 4x4 pin is a 4x4 mask, but a 3.8x3.8 pin
 module render_pin(xlength)
 {
-    difference() {
-        union() {
-            move([0,0,-0.125]) rounded_prismoid(size1=[xlength-1,3], size2=[xlength-1,3], h=0.8, r=0.5, center=true);
-            move([0,0,0.75]) rounded_prismoid(size1=[xlength-1,3], size2=[xlength,3.8], h=1.125, r=0.5, center=true);
-            move([0,0,1.875]) cuboid([xlength,3.8,1.25], fillet = 0.5, edges=EDGES_Z_ALL+EDGES_TOP);
-        }
-    }
+    move([0,0,-0.125]) rounded_prismoid(size1=[xlength-1.2,3], size2=[xlength-1.2,3], h=0.8, r=0.5, center=true);
+    move([0,0,0.75]) rounded_prismoid(size1=[xlength-1.2,3], size2=[xlength-0.2,3.8], h=1.125, r=0.5, center=true);
+    move([0,0,1.875]) cuboid([xlength-0.2,3.8,1.25], fillet = 0.5, edges=EDGES_Z_ALL+EDGES_TOP);
+}
+
+module render_pin_mask(xlength)
+{
+    move([0,0,-0.125]) rounded_prismoid(size1=[xlength-1,3], size2=[xlength-1,3], h=0.8, r=0.5, center=true);
+    move([0,0,0.75]) rounded_prismoid(size1=[xlength-1,3], size2=[xlength,4], h=1.125, r=0.5, center=true);
+    move([0,0,1.875]) cuboid([xlength,4,1.25], fillet = 0.5, edges=EDGES_Z_ALL+EDGES_TOP);
 }
 
 // Draws a square pin
 module square_pin() {
     render_pin(4);
-}
-
-module render_pin_mask(xlength)
-{
-    difference() {
-        union() {
-            move([0,0,-0.125]) rounded_prismoid(size1=[xlength-1,3], size2=[xlength-1,3], h=0.8, r=0.5, center=true);
-            move([0,0,0.75]) rounded_prismoid(size1=[xlength-1,3], size2=[xlength,4], h=1.125, r=0.5, center=true);
-            move([0,0,1.875]) cuboid([xlength,4,1.25], fillet = 0.5, edges=EDGES_Z_ALL+EDGES_TOP);
-        }
-    }
 }
 
 // Draws a square pin mask
