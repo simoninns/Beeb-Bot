@@ -44,7 +44,7 @@ module render_block15(length)
     }
 
     // Add a square pin to the top-side
-    color([0.2,0.2,0.2]) move([0,0,(length / 2) + 0.5]) square_pin();
+    color("lightgrey") move([0,0,(length / 2) + 0.5]) square_pin();
 }
 
 module block15(y_units, printMode)

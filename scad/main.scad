@@ -35,73 +35,109 @@ include <chain.scad>
 include <cover.scad>
 include <mockup.scad>
 
-// Rendering quality
-$fn = 20;
+/* [Main] */
+// Display the assembly guide?
+display_mockup = false;
 
-part_or_mockup = "Mockup"; // [Mockup, Part]
+/* [Parts] */
+// Display parts ready for printing?
+printMode = false;
 
-// Print mode
-use_print_mode = "No"; // [Yes, No]
+// Aluminium profiles:
+choose_alu = "None"; // [None, 90mm Profile, 120mm Profile, End cap]
 
-// Choose the item to display
-choose_item = "alu90";  // [alu90, alu120, alu_end_cap, block5, block7p5, block15, block30, blockv15, plate30x90, plate15x90, link15, link30, hinge, hub_base, hub_top, large_pulley_wheel, grey_axle, cog_wheel_top, cog_wheel_bottom, gear_wheel, locking_washer, v_axle, clip10, mini_switch_plunger, mini_switch_base, mini_switch_top, caster_ball_holder, caster_ball_base, caster_ball_top, chain, cover]
+// Blocks:
+choose_block = "None"; // [None, 5mm Block, 7.5mm Block, 15mm Block, 30mm Block, V15 Block]
+
+// Build plates:
+choose_plate = "None"; // [None, 30x90mm single row plate, 15x90mm single row plate]
+
+// Links:
+choose_link = "None"; // [None, 15mm link, 30mm link]
+
+// Hinges:
+choose_hinge = "None"; // [None, Small hinge]
+
+// Gear hubs:
+choose_hub = "None"; // [None, Hub base, Hub top]
+
+// Gears, wheels and accessories:
+choose_gear = "None"; // [None, Large pulley wheel, Grey axle, Cog wheel top, Cog wheel bottom, Gear wheel, Locking washer, V axle, 10mm axle clip]
+
+// Mini-Switch:
+choose_switch = "None"; // [None, Mini switch plunger, Mini switch base, Mini switch top]
+
+// Ball caster:
+choose_caster = "None"; // [None, Ball caster holder, Ball caster base, Ball caster top]
+
+// Drive chain:
+choose_chain = "None"; // [None, Drive chain]
+
+// Cover:
+choose_cover = "None"; // [None, Cover]
 
 // Main function
-if (part_or_mockup == "Part") {
-    printMode = (use_print_mode == "Yes") ? true:false;
+module main()
+{
+    if (!display_mockup) {
+        // Rendering quality
+        $fn = 20;
 
-    // Aluminium profiles
-    if (choose_item == "alu90") alu_profile15(6, printMode);
-    if (choose_item == "alu120") alu_profile15(8, printMode);
-    if (choose_item == "alu_end_cap") alu_profile_end_cap(printMode);
+        // Aluminium profiles
+        if (choose_alu == "90mm Profile") alu_profile15(6, printMode);
+        if (choose_alu == "120mm Profile") alu_profile15(8, printMode);
+        if (choose_alu == "End cap") alu_profile_end_cap(printMode);
 
-    // Blocks
-    if (choose_item == "block5") block5(printMode);
-    if (choose_item == "block7p5") block7p5(printMode);
-    if (choose_item == "block15") block15(1, printMode);
-    if (choose_item == "block30") block15(2, printMode);
-    if (choose_item == "blockv15") blockv15(printMode);
+        // Blocks
+        if (choose_block == "5mm Block") block5(printMode);
+        if (choose_block == "7.5mm Block") block7p5(printMode);
+        if (choose_block == "15mm Block") block15(1, printMode);
+        if (choose_block == "30mm Block") block15(2, printMode);
+        if (choose_block == "V15 Block") blockv15(printMode);
 
-    // Plates
-    if (choose_item == "plate30x90") plate15(6, 2, printMode);
-    if (choose_item == "plate15x90") plate15(6, 1, printMode);
+        // Plates
+        if (choose_plate == "30x90mm single row plate") plate15(6, 2, printMode);
+        if (choose_plate == "15x90mm single row plate") plate15(6, 1, printMode);
 
-    // Links
-    if (choose_item == "link15") link(1, printMode);
-    if (choose_item == "link30") link(2, printMode);
+        // Links
+        if (choose_link == "15mm link") link(1, printMode);
+        if (choose_link == "30mm link") link(2, printMode);
 
-    // Hinges
-    if (choose_item == "hinge") hinge(printMode);
+        // Hinges
+        if (choose_hinge == "Small hinge") hinge(printMode);
 
-    // Hub
-    if (choose_item == "hub_base") hub_base(printMode);
-    if (choose_item == "hub_top") hub_top(printMode);
+        // Hub
+        if (choose_hub == "Hub base") hub_base(printMode);
+        if (choose_hub == "Hub top") hub_top(printMode);
 
-    // Wheels and cogs
-    if (choose_item == "large_pulley_wheel") large_pulley_wheel(printMode);
-    if (choose_item == "grey_axle") grey_axle(printMode);
-    if (choose_item == "cog_wheel_top") cog_wheel_top(printMode);
-    if (choose_item == "cog_wheel_bottom") cog_wheel_bottom(printMode);
-    if (choose_item == "gear_wheel") gear_wheel(printMode);
-    if (choose_item == "locking_washer") locking_washer(printMode);
-    if (choose_item == "v_axle") vaxle(printMode);
-    if (choose_item == "clip10") clip10(printMode);
+        // Wheels and cogs
+        if (choose_gear == "Large pulley wheel") large_pulley_wheel(printMode);
+        if (choose_gear == "Grey axle") grey_axle(printMode);
+        if (choose_gear == "Cog wheel top") cog_wheel_top(printMode);
+        if (choose_gear == "Cog wheel bottom") cog_wheel_bottom(printMode);
+        if (choose_gear == "Gear wheel") gear_wheel(printMode);
+        if (choose_gear == "Locking washer") locking_washer(printMode);
+        if (choose_gear == "V axle") vaxle(printMode);
+        if (choose_gear == "10mm axle clip") clip10(printMode);
 
-    // Electronics
-    if (choose_item == "mini_switch_plunger") mini_switch_plunger(printMode);
-    if (choose_item == "mini_switch_base") mini_switch_base(printMode);
-    if (choose_item == "mini_switch_top") mini_switch_top(printMode);
+        // Mini-Switch
+        if (choose_switch == "Mini switch plunger") mini_switch_plunger(printMode);
+        if (choose_switch == "Mini switch base") mini_switch_base(printMode);
+        if (choose_switch == "Mini switch top") mini_switch_top(printMode);
 
-    // Caster ball wheel
-    if (choose_item == "caster_ball_holder") caster_ball_holder(printMode);
-    if (choose_item == "caster_ball_base") caster_ball_base(printMode);
-    if (choose_item == "caster_ball_top") caster_ball_top(printMode);
+        // Ball caster
+        if (choose_caster == "Ball caster holder") caster_ball_holder(printMode);
+        if (choose_caster == "Ball caster base") caster_ball_base(printMode);
+        if (choose_caster == "Ball caster top") caster_ball_top(printMode);
 
-    // Chain
-    if (choose_item == "chain") chain(printMode);
+        // Chain
+        if (choose_chain == "Drive chain") chain(printMode);
 
-    // Cover
-    if (choose_item == "cover") cover(printMode);
-} else {
-    mock_up();
+        // Cover
+        if (choose_cover == "Cover") cover(printMode);
+    } else {
+        mock_up();
+    }
 }
+
+main();
