@@ -167,7 +167,7 @@ module caster_ball_base(printMode)
 {
     $fn=60;
     if (printMode) {
-        move([0,0,5.5]) render_caster_ball_base();
+        rotate([0,180,0]) move([0,0,5.5]) render_caster_ball_base();
     } else {
         color("lightgrey") render_caster_ball_base();
         color("lightgrey") render_caster_ball_top();
@@ -178,7 +178,7 @@ module caster_ball_top(printMode)
 {
     $fn=60;
     if (printMode) {
-        move([0,0,-8]) render_caster_ball_top();
+        rotate([0,180,0]) move([0,0,-8]) render_caster_ball_top();
     } else {
         color("lightgrey") render_caster_ball_base();
         color("lightgrey") render_caster_ball_top();

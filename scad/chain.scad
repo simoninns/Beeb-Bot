@@ -76,7 +76,7 @@ module chain(printMode)
     $fn=10; // Keep this low, or the slicer will have problems
             // when it comes to printing
     if (printMode) {
-        render_chain(20);
+        rotate([90,0,0]) move([-(20 / 2) * 4.75,2,0]) render_chain(20);
     } else {
         color("red") render_chain(20);
     }

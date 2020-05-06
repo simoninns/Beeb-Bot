@@ -106,7 +106,7 @@ module render_block7p5()
 module block7p5(printMode)
 {
     if (printMode) {
-        move([0,0,(7.5 / 2)]) render_block7p5();
+        rotate([0,90,0]) move([-7.5,0,0]) render_block7p5();
     } else {
         color("red") render_block7p5();
     }

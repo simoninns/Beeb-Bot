@@ -29,28 +29,38 @@ use <BOSL/shapes.scad>
 include <common.scad>
 include <alu_profile.scad>
 
+// Note: The cover is designed to be quite thin in order to be
+// as transparent as possible when printed with clear filament
 module render_cover()
 {
+    width=125;
+    thickn=1;
+    height=32;
+
     difference() {
-        cuboid([123,123,30], chamfer=2, edges=EDGES_ALL-EDGES_BOTTOM); 
+        cuboid([width,width,height], chamfer=2, edges=EDGES_ALL-EDGES_BOTTOM); 
         
-        move([0,0,-2]) cuboid([121,121,30], chamfer=2, edges=EDGES_ALL-EDGES_BOTTOM);
-        move([0,0,-5]) cuboid([97,125,30], fillet=5, edges=EDGES_Y_ALL);
+        move([0,0,-thickn]) cuboid([width - (thickn*2),width - (thickn*2),height], chamfer=2, edges=EDGES_ALL-EDGES_BOTTOM);
+        move([0,0,-5]) cuboid([97,width + 2,height], fillet=5, edges=EDGES_Y_ALL);
+
+        move([0,0,(height / 2) - 1.2]) cyl(h=1.2, d=width-8, $fn=60);
     }
-
+    
     // Frame clips
-    move([60.5,0,-13.25 + 3]) cuboid([2,38,3.5], chamfer=1);
-    move([-60.5,0,-13.25 + 3]) cuboid([2,38,3.5], chamfer=1);
-
-    // Frame clips
-    move([60.5,0,-13.25 + 3]) cuboid([2,38,3.5], chamfer=1);
-    move([-60.5,0,-13.25 + 3]) cuboid([2,38,3.5], chamfer=1);
+    difference() {
+        move([((width - (thickn*2)) / 2),0, -(height/2) + 5]) cuboid([3,width / 3,3.5], chamfer=1.5);
+        move([((width - (thickn*2)) / 2) + 1.5,0, -(height/2) + 5]) cuboid([3,width / 3,3.5]);
+    }
+    difference() {
+        move([-((width - (thickn*2)) / 2),0, -(height/2) + 5]) cuboid([3,width / 3,3.5], chamfer=1.5);
+        move([-((width - (thickn*2)) / 2) - 1.5,0, -(height/2) + 5]) cuboid([3,width / 3,3.5]);
+    }
 }
 
 module cover(printMode)
 {
     if (printMode) {
-        move([0,0,5]) render_cover();
+        rotate([180,0,0]) move([0,0,-16]) render_cover();
     } else {
         color("white") render_cover();
     }

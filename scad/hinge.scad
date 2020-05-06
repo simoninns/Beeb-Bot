@@ -58,7 +58,7 @@ module render_hinge()
 module hinge(printMode)
 {
     if (printMode) {
-        move([0,0,(7.5 / 2)]) render_hinge();
+        rotate([0,90,0]) move([-7.5,0,0]) render_hinge();
     } else {
         color("lightgrey") render_hinge();
     }

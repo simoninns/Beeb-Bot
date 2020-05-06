@@ -157,7 +157,7 @@ module render_micro_switch()
 module mini_switch_plunger(printMode)
 {
     if (printMode) {
-        render_switch_plunger();
+        rotate([-90,0,0]) move([0,-2.25,0]) render_switch_plunger();
     } else {
         color("red") move([-8,0,2.5]) render_switch_plunger();
     }
@@ -166,17 +166,16 @@ module mini_switch_plunger(printMode)
 module mini_switch_base(printMode)
 {
     if (printMode) {
-        render_switch_case_base();
+        rotate([90,0,0]) move([0,3.75,0]) render_switch_case_base();
     } else {
         color("lightgrey") render_switch_case_base();
-        //move([3,0,0]) rotate([90,90,180]) render_micro_switch();
     }
 }
 
 module mini_switch_top(printMode)
 {
     if (printMode) {
-        render_switch_case_top();
+        rotate([90,0,0]) move([0,-2.75,0]) render_switch_case_top();
     } else {
         color("lightgrey") render_switch_case_top();
     }

@@ -73,10 +73,13 @@ module render_grey_axle(displayMode)
             move([4.5,0,0]) rotate([0,90,0]) cyl(h=15,d=4,fillet2=0.5);
         }
     } else {
-        for(xpos = [0:4.5:7*4.5]) {
-            move([xpos,0,0]) cyl(h=15,d=4,fillet2=0.5);
+        multi = 13; // How many to render
+        move([-(((multi-1)*4.5) / 2),0,0]) {
+            for(xpos = [0:4.5:((multi-1)*4.5)]) {
+                move([xpos,0,0]) cyl(h=15,d=4,fillet2=0.5);
+            }
+            move([(multi*4) / 2,0,-(15/2) + (1.2/2)]) cuboid([(multi-1)*4.5,0.6,1.2]);
         }
-        move([15,0,-(15/2) + (1.2/2)]) cuboid([7*4.5,0.6,1.2]);
     }
 }
 
@@ -128,7 +131,7 @@ module large_pulley_wheel(printMode)
     $fn=60;
 
     if (printMode) {
-        render_large_pulley_wheel();
+        move([0,0,2.5]) render_large_pulley_wheel();
     } else {
         color("red") render_large_pulley_wheel();
         color("lightgrey") render_grey_axle(true);
@@ -200,7 +203,7 @@ module gear_wheel(printMode)
     $fn=60;
 
     if (printMode) {
-        render_gear_wheel();
+        move([0,0,2.5]) render_gear_wheel();
     } else {
         color([0.2,0.2,0.2]) render_gear_wheel();
     }
@@ -335,7 +338,7 @@ module locking_washer(printMode)
 {
     if (printMode) {
         $fn=60;
-        render_locking_washer();
+        move([0,0,1]) render_locking_washer();
     } else {
         color("red") render_locking_washer();
     }
@@ -347,7 +350,7 @@ module single_vaxle()
 {
     difference() {
         union() {
-            cyl(h=17, d=4);
+            cyl(h=17, d=3.9);
             move([0,0,(17/2 - 0.5)]) cyl(h=1,d=4.5, chamfer1=0.25);
             move([0,0,-(17/2 - 0.5)]) cyl(h=1,d=4.5, chamfer2=0.25);
         }
@@ -385,7 +388,7 @@ module render_clip10()
         cyl(h=11, d=4);
         move([2.5,0,0]) cuboid([3,3,12]);
         move([3.75,0,0]) cuboid([2,8,12]);
-        move([-3,0,5.5]) cuboid([4,1,3]);
+        move([-3,0,5.5]) cuboid([4,1.5,3]);
     }    
 }
 
