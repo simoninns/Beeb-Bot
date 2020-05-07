@@ -31,7 +31,6 @@ include <common.scad>
 // Render block 15x15x15, 30x15x15 and up -----------------------------------------------------------------------------
 module render_block15(length)
 {
-   // Profile length is -4 as profile caps are 2mm thick
     color("lightgrey") {
         difference() {
             column_body(length, false);

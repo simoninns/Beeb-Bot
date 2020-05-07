@@ -404,6 +404,20 @@ module sub_assembly_13(standalone)
     move([-45-7.5,45 + 7.5,45+7.5 + 2.5]) rotate([0,0,90]) block5(false);
 }
 
+// 14 - Sensors
+module sub_assembly_14(standalone)
+{
+    // If display is standalone, include the other assemblies
+    // to make things clearer
+    if (standalone) {
+        sub_assembly_1(false);
+        sub_assembly_3(false);
+    }
+
+    // Barcode reader mount
+    move([0,-45 - 38, 0]) rotate([90,0,90]) hinged_block(false);
+}
+
 module sub_assembly_complete()
 {
     sub_assembly_1(false);
@@ -419,4 +433,5 @@ module sub_assembly_complete()
     sub_assembly_11(false);
     sub_assembly_12(false);
     sub_assembly_13(false);
+    sub_assembly_14(false);
 }

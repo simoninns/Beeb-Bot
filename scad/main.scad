@@ -56,7 +56,7 @@ choose_plate = "None"; // [None, 30x90mm single row plate, 15x90mm single row pl
 choose_link = "None"; // [None, 15mm link, 30mm link]
 
 // Hinges:
-choose_hinge = "None"; // [None, Small hinge]
+choose_hinge = "None"; // [None, Small hinge, Hinged block]
 
 // Gear hubs:
 choose_hub = "None"; // [None, Hub base, Hub top]
@@ -73,12 +73,12 @@ choose_caster = "None"; // [None, Ball caster holder, Ball caster base, Ball cas
 // Drive chain:
 choose_chain = "None"; // [None, Drive chain]
 
-// Cover:
+// Cover - Not complete:
 choose_cover = "None"; // [None, Cover]
 
 /* [Assembly guide] */
 // Display a sub-assembly:
-choose_sub_assembly = "None"; // [None, 1 - Lower front cross member, 2 - Lower side members, 3 - Front vertical legs, 4 - Rear vertical legs, 5 - Upper side members, 6 - Upper front and rear cross members, 7 - Rear lower member, 8 - Rear caster support, 9 - Driving wheels assembly, 10 - Ball caster assembly, 11 - Front bumper assembly, 12 - Motors and gears, 13 - PCB supports, Complete]
+choose_sub_assembly = "None"; // [None, 1 - Lower front cross member, 2 - Lower side members, 3 - Front vertical legs, 4 - Rear vertical legs, 5 - Upper side members, 6 - Upper front and rear cross members, 7 - Rear lower member, 8 - Rear caster support, 9 - Driving wheels assembly, 10 - Ball caster assembly, 11 - Front bumper assembly, 12 - Motors and gears, 13 - PCB supports, 14 - Sensors, Complete]
 
 // Main function module
 module main()
@@ -110,6 +110,7 @@ module main()
 
         // Hinges
         if (choose_hinge == "Small hinge") hinge(printMode);
+        if (choose_hinge == "Hinged block") hinged_block(printMode);
 
         // Hub
         if (choose_hub == "Hub base") hub_base(printMode);
@@ -157,6 +158,7 @@ module main()
         if (choose_sub_assembly == "11 - Front bumper assembly") sub_assembly_11(true);
         if (choose_sub_assembly == "12 - Motors and gears") sub_assembly_12(true);
         if (choose_sub_assembly == "13 - PCB supports") sub_assembly_13(true);
+        if (choose_sub_assembly == "14 - Sensors") sub_assembly_14(true);
 
         if (choose_sub_assembly == "Complete") sub_assembly_complete();
     }
