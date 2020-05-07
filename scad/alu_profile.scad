@@ -26,7 +26,7 @@ include <BOSL/constants.scad>
 use <BOSL/transforms.scad>
 use <BOSL/shapes.scad>
 
-include <common.scad>
+include <pins.scad>
 
 // Draws an aluminium profile end cap
 // Note: end cap is 1.5mm high to allow for tollerances once
@@ -37,15 +37,10 @@ module render_single_profile_end_cap()
         cuboid([15,15,1.5], chamfer=0.5, edges=EDGES_Z_ALL+EDGES_TOP);
 
         // Cut out channels
-        move([5.5,0,0]) cyl(h=3, d=4);
-        move([0,5.5,0]) cyl(h=3, d=4);
-        move([-5.5,0,0]) cyl(h=3, d=4);
-        move([0,-5.5,0]) cyl(h=3, d=4);
-
-        move([7.5,0,0]) cuboid([3,3,3]);
-        move([0,7.5,0]) cuboid([3,3,3]);
-        move([-7.5,0,0]) cuboid([3,3,3]);
-        move([0,-7.5,0]) cuboid([3,3,3]);
+        rotate([0,-90,0]) move([0,0,-7])render() square_pin_mask(5, true);
+        rotate([0,90,0]) move([0,0,-7])render() square_pin_mask(5, true);
+        rotate([90,90,0]) move([0,0,-7])render() square_pin_mask(5, true);
+        rotate([-90,90,0]) move([0,0,-7])render() square_pin_mask(5, true);
     }
 
     // Add a square pin to the top-side
@@ -74,10 +69,10 @@ module render_profile_end_cap(multiple)
 module render_alu_profile(length)
 {
     // Profile length is -4 as profile caps are 2mm thick
-    color("lightgrey") column_body(length - 4, true);
+    color("lightgrey") render() column_body(length - 4, true);
 
-    color([0.2,0.2,0.2]) move([0,0,(length / 2) - 1]) render_profile_end_cap(1);
-    color([0.2,0.2,0.2]) rotate([180,0,0]) move([0,0,(length / 2) - 1]) render_profile_end_cap(1);
+    color([0.2,0.2,0.2]) move([0,0,(length / 2) - 1]) render() render_profile_end_cap(1);
+    color([0.2,0.2,0.2]) rotate([180,0,0]) move([0,0,(length / 2) - 1]) render() render_profile_end_cap(1);
 }
 
 module alu_profile15(y_units, printMode)
@@ -93,14 +88,14 @@ module alu_profile15(y_units, printMode)
         }
     } else {
         // Profile length is -4 as profile caps are 2mm thick
-        color("lightgrey") column_body(length - 4, true);
+        color("lightgrey") render() column_body(length - 4, true);
 
         // The -.75 moves the end caps to the right position...
         // I need to figure out why this prints 1mm longer than
         // the model (probably due to the tolerance on the underside
         // of the end caps).
-        color([0.2,0.2,0.2]) move([0,0,(length / 2) - .75]) render_profile_end_cap(1);
-        color([0.2,0.2,0.2]) rotate([180,0,0]) move([0,0,(length / 2) - .75]) render_profile_end_cap(1);
+        color([0.2,0.2,0.2]) move([0,0,(length / 2) - .75]) render() render_profile_end_cap(1);
+        color([0.2,0.2,0.2]) rotate([180,0,0]) move([0,0,(length / 2) - .75]) render() render_profile_end_cap(1);
     }
 }
 

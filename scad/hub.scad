@@ -29,8 +29,6 @@ use <BOSL/threading.scad>
 use <BOSL/metric_screws.scad>
 use <BOSL/involute_gears.scad>
 
-include <common.scad>
-
 module render_hub_base()
 {
     difference() {

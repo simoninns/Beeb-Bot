@@ -26,8 +26,6 @@ include <BOSL/constants.scad>
 use <BOSL/transforms.scad>
 use <BOSL/shapes.scad>
 
-include <common.scad>
-
 module render_chain_cap()
 {
     move([0,0,9.5 / 2 - (0.9 / 2)]) {

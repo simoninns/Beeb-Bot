@@ -26,7 +26,7 @@ include <BOSL/constants.scad>
 use <BOSL/transforms.scad>
 use <BOSL/shapes.scad>
 
-include <common.scad>
+include <pins.scad>
 
 // Render block 15x15x15, 30x15x15 and up -----------------------------------------------------------------------------
 module render_block15(length)
@@ -34,11 +34,9 @@ module render_block15(length)
     color("lightgrey") {
         difference() {
             column_body(length, false);
-            move([0,0,-(length / 2) + 2]) xcyl(h=16, d=4);
-
+            move([0,0,-(length / 2) + 0.5]) render() square_pin_mask(length + 4, true);
             move([6,0,-(length / 2) + 1.5]) cuboid([5,4,5]);
             move([-6,0,-(length / 2) + 1.5]) cuboid([5,4,5]);
-            move([0,0,-(length / 2)]) cuboid([15,3,3]);
         }
     }
 
@@ -71,7 +69,7 @@ module render_block5()
             move([0,0,3]) square_pin();
         }
 
-        move([0,0,-2]) square_pin_mask(20);
+        move([0,0,-2]) square_pin_mask(20, false);
     }
 }
 
@@ -91,14 +89,11 @@ module render_block7p5()
         cuboid([15,15,7.5]);
 
         move([0,0,-3.25]) square_pin_mask(20);
-        rotate([180,0,0]) move([0,0,-3.25]) square_pin_mask(20);
+        rotate([180,0,0]) move([0,0,-3.25]) square_pin_mask(20, false);
 
         // Cut out channels
-        move([0,5.5,0]) xcyl(h=20, d=4);
-        move([0,-5.5,0]) xcyl(h=20, d=4);
-
-        move([0,7.5,0]) cuboid([20,3,3]);
-        move([0,-7.5,0]) cuboid([20,3,3]);
+        rotate([90,0,0]) move([0,0,-7]) render() square_pin_mask(20, true);
+        rotate([-90,0,0]) move([0,0,-7]) render() square_pin_mask(20, true);
     }
 }
 
@@ -118,8 +113,8 @@ module render_blockv15()
         cuboid([15,15,15]);
         move([3.5,3.5,-1.5]) cuboid([15,15,15]);
 
-        rotate([90,90,180]) move([5,0,-7]) square_pin_mask(15);
-        rotate([90,90,90]) move([5,0,-7]) square_pin_mask(15);
+        rotate([90,90,180]) move([5,0,-7]) square_pin_mask(15, false);
+        rotate([90,90,90]) move([5,0,-7]) square_pin_mask(15, false);
     }
 
     // Add a pin to the top-side

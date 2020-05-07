@@ -26,7 +26,7 @@ include <BOSL/constants.scad>
 use <BOSL/transforms.scad>
 use <BOSL/shapes.scad>
 
-include <common.scad>
+include <pins.scad>
 
 // Render hinge -------------------------------------------------------------------------------------------------------
 module render_hinge()

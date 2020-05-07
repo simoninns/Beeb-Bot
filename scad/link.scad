@@ -26,8 +26,6 @@ include <BOSL/constants.scad>
 use <BOSL/transforms.scad>
 use <BOSL/shapes.scad>
 
-include <common.scad>
-
 // Render link 15 and up ----------------------------------------------------------------------------------------------
 module render_link(length)
 {

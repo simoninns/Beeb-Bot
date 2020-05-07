@@ -29,8 +29,6 @@ use <BOSL/involute_gears.scad>
 use <BOSL/threading.scad>
 use <BOSL/metric_screws.scad>
 
-include <common.scad>
-
 // Note: The inner hub is common to both the gear_wheel and the large_pulley_wheel
 module inner_hub()
 {
@@ -88,7 +86,7 @@ module render_large_pulley_wheel()
     width = 61.5;
     groove = 4;
 
-    difference() {
+    render() difference() {
         union() {
             move([0,0,2]) cyl(h=1,d=width, chamfer1 = 0, chamfer2 = 0.5);
             move([0,0,1]) cyl(h=1, d1=width - groove, d2=width);
@@ -106,7 +104,7 @@ module render_large_pulley_wheel()
             move([0,0,2.5]) zcyl(h=.51, d1=4,d2=5);
         }
 
-        render() zrot_copies(rots=[0,60,120,180,240,300], r=0, subrot=true) {
+        zrot_copies(rots=[0,60,120,180,240,300], r=0, subrot=true) {
             arced_slot(d=42 + 2.5, h=7, sd=4, sa=-17.5, ea=17.5);
         }
 
@@ -156,7 +154,7 @@ module render_gear_wheel()
     oc1 = 47 - 2; // outer diameter
     cir1 = 2 * 3.1415927 * (oc1 / 2);
     nt1 = 30; // number of teeth
-    difference() {
+    render() difference() {
         rotate([0,0,7.5]) gear(mm_per_tooth=cir1/nt1, number_of_teeth=nt1, thickness=5, pressure_angle=20, backlash=0.1, hole_diameter=25.5);  
 
         // 3x 4mm holes around the circumference of the gear

@@ -27,7 +27,7 @@ use <BOSL/transforms.scad>
 use <BOSL/shapes.scad>
 use <BOSL/metric_screws.scad>
 
-include <common.scad>
+include <pins.scad>
 include <alu_profile.scad>
 include <plate.scad>
 include <mini_switch.scad>

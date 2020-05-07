@@ -26,6 +26,7 @@ include <BOSL/constants.scad>
 use <BOSL/transforms.scad>
 use <BOSL/shapes.scad>
 
+include <pins.scad>
 
 module render_switch_plunger()
 {

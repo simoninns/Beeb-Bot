@@ -26,7 +26,6 @@ include <BOSL/constants.scad>
 use <BOSL/transforms.scad>
 use <BOSL/shapes.scad>
 
-include <common.scad>
 include <alu_profile.scad>
 
 // Note: The cover is designed to be quite thin in order to be
