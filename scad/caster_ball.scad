@@ -170,7 +170,6 @@ module caster_ball_base(printMode)
         rotate([0,180,0]) move([0,0,5.5]) render_caster_ball_base();
     } else {
         color("lightgrey") render_caster_ball_base();
-        color("lightgrey") render_caster_ball_top();
     }
 }
 
@@ -180,7 +179,13 @@ module caster_ball_top(printMode)
     if (printMode) {
         rotate([0,180,0]) move([0,0,-8]) render_caster_ball_top();
     } else {
-        color("lightgrey") render_caster_ball_base();
         color("lightgrey") render_caster_ball_top();
     }
+}
+
+// Note: This module renders the ball bearing in the caster
+// only for display... not for printing
+module caster_ball_bearing(printMode)
+{
+    if (!printMode) color([0.4,0.4,0.4]) move([0,0,-3.5]) staggered_sphere(d=20, circum=true, $fn=60);
 }

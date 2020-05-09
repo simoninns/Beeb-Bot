@@ -65,7 +65,7 @@ module render_switch_case_base()
         move([-8 + (0.125 / 2),0,7]) cuboid([12.125,5,3]);
 
         // Cut outs
-        render_top_cuts();
+        render_top_cuts(true);
     }
 
     // Grooves for the lever to slide in
@@ -113,45 +113,54 @@ module render_switch_case_top()
         move([10,2,-5]) ycyl(h=4, d=2.5);
     }
     
-    render_top_cuts();
+    render_top_cuts(false);
 
     // Add joiner V-profile
     move([-5.5,4.2,0]) v_profile(19);
 }
 
-module render_top_cuts()
+module render_top_cuts(isMask)
 {
-    move([14.5,3.3,0]) cuboid([1,0.9,13]);
-    move([3,3.3,-7]) cuboid([14,0.9,1]);
-    move([-14.5,3.3,0]) cuboid([1,0.9,10]);
-    move([6,3.3,7]) cuboid([12,0.9,1]);
+    if (isMask) {
+        move([14.5,3.4,0]) cuboid([2,1.1,13]);
+        move([3,3.4,-7]) cuboid([14,1.1,2]);
+        move([-14.5,3.4,0]) cuboid([2,1.1,10]);
+        move([6,3.4,7]) cuboid([12,1.1,2]);
+    } else {
+        move([14.5,3.3,0]) cuboid([1,0.9,13]);
+        move([3,3.3,-7]) cuboid([14,0.9,1]);
+        move([-14.5,3.3,0]) cuboid([1,0.9,10]);
+        move([6,3.3,7]) cuboid([12,0.9,1]);
+    }
 }
 
 // Microswitch is a Multicomp DM1-01P-30-3
-module render_micro_switch()
+module mini_switch_micro_switch(printMode)
 {
-    // Switch body
-    difference() {
-        union() {
-            color("lightgrey") move([0,-1.75,0]) cuboid([12.8,3,5.8]);
-            color([0.2,0.2,0.2]) move([0,1.5,0]) cuboid([12.8,3.5,5.7]);
+    rotate([90,-90,0]) move([0,-3,0]) {
+        // Switch body
+        difference() {
+            union() {
+                color("lightgrey") move([0,-1.75,0]) cuboid([12.8,3,5.8]);
+                color([0.2,0.2,0.2]) move([0,1.5,0]) cuboid([12.8,3.5,5.7]);
 
-            // Lever (10 degrees in minimum on position, 17 is maximum off position)
-            rotdeg = 8;
-            rot([0,0,rotdeg], cp=[-(12.8 / 2) + 1.6,0,0]) move([-(12.8 / 2) + 1.6,3.25,-(5.8 / 2) + (3.2 / 2) - 0.25])
-                cuboid([11.5,0.25,3.2], center=false);
+                // Lever (10 degrees in minimum on position, 17 is maximum off position)
+                rotdeg = 8;
+                rot([0,0,rotdeg], cp=[-(12.8 / 2) + 1.6,0,0]) move([-(12.8 / 2) + 1.6,3.25,-(5.8 / 2) + (3.2 / 2) - 0.25])
+                    cuboid([11.5,0.25,3.2], center=false);
+            }
+
+            // Mounting holes
+            move([-3.25,-3.25 + 1.5,0 - (6 / 2)]) cyl(h=6, d=2.2, center=false);
+            move([+3.25,-3.25 + 1.5,0 - (6 / 2)]) cyl(h=6, d=2.2, center=false);
         }
 
-        // Mounting holes
-        move([-3.25,-3.25 + 1.5,0 - (6 / 2)]) cyl(h=6, d=2.2, center=false);
-        move([+3.25,-3.25 + 1.5,0 - (6 / 2)]) cyl(h=6, d=2.2, center=false);
-    }
-
-    // Terminals
-    color("yellow") {
-        move([-5.08,-(6.5 / 2) - 3.3,0]) ycyl(h=3.3, d=0.9, center=false);
-        move([-0,-(6.5 / 2) - 3.3,0]) ycyl(h=3.3, d=0.9, center=false);
-        move([5.08,-(6.5 / 2) - 3.3,0]) ycyl(h=3.3, d=0.9, center=false);
+        // Terminals
+        color("yellow") {
+            move([-5.08,-(6.5 / 2) - 3.3,0]) ycyl(h=3.3, d=0.9, center=false);
+            move([-0,-(6.5 / 2) - 3.3,0]) ycyl(h=3.3, d=0.9, center=false);
+            move([5.08,-(6.5 / 2) - 3.3,0]) ycyl(h=3.3, d=0.9, center=false);
+        }
     }
 }
 

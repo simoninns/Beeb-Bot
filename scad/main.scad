@@ -34,6 +34,7 @@ include <caster_ball.scad>
 include <chain.scad>
 include <cover.scad>
 include <assemblies.scad>
+include <diagrams.scad>
 
 /* [Main] */
 // What should be displayed?
@@ -77,8 +78,11 @@ choose_chain = "None"; // [None, Drive chain]
 choose_cover = "None"; // [None, Cover]
 
 /* [Assembly guide] */
-// Display a sub-assembly:
-choose_sub_assembly = "None"; // [None, 1 - Lower front cross member, 2 - Lower side members, 3 - Front vertical legs, 4 - Rear vertical legs, 5 - Upper side members, 6 - Upper front and rear cross members, 7 - Rear lower member, 8 - Rear caster support, 9 - Driving wheels assembly, 10 - Ball caster assembly, 11 - Front bumper assembly, 12 - Motors and gears, 13 - PCB supports, 14 - Sensors, Complete]
+// Display a sub-assembly diagram:
+choose_sub_assembly = "None"; // [None, 1 - Lower front cross member, 2 - Lower side members, 3 - Front vertical legs, 4 - Rear vertical legs, 5 - Upper side members, 6 - Upper front and rear cross members, 7 - Rear lower member, 8 - Rear caster support, 9 - Driving wheels assembly, 10 - Ball caster assembly, 11 - Front bumper assembly, 12 - Motors and gears, 13 - PCB supports, 14 - Sensors]
+
+// Display an assembly diagram:
+choose_diagram = "None"; // [None, Complete Robot, Mini-Switch, Ball Caster, Block Hinge]
 
 // Main function module
 module main()
@@ -145,6 +149,10 @@ module main()
 
     // Display sub-assemblies (according to the original BBC Buggy assembly manual)
     if (display_mode == "Assembly steps") {
+        // Rendering quality
+        $fn = 20;
+        
+        // Sub-assembly diagrams
         if (choose_sub_assembly == "1 - Lower front cross member") sub_assembly_1(true);
         if (choose_sub_assembly == "2 - Lower side members") sub_assembly_2(true);
         if (choose_sub_assembly == "3 - Front vertical legs") sub_assembly_3(true);
@@ -160,7 +168,11 @@ module main()
         if (choose_sub_assembly == "13 - PCB supports") sub_assembly_13(true);
         if (choose_sub_assembly == "14 - Sensors") sub_assembly_14(true);
 
-        if (choose_sub_assembly == "Complete") sub_assembly_complete();
+        // Other assembly diagrams
+        if (choose_diagram == "Complete Robot") sub_assembly_complete();
+        if (choose_diagram == "Mini-Switch") diagram_mini_switch();
+        if (choose_diagram == "Ball Caster") diagram_ball_caster();
+        if (choose_diagram == "Block Hinge") diagram_block_hinge();
     }
 }
 

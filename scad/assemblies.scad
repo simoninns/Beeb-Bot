@@ -36,6 +36,7 @@ include <hub.scad>
 include <cogs_and_wheels.scad>
 include <cover.scad>
 include <link.scad>
+include <caster_ball.scad>
 
 // 1 - Lower front cross member
 module sub_assembly_1(standalone)
@@ -282,8 +283,11 @@ module sub_assembly_10(standalone)
 
     // Ball holder
     move([3,45 + 15 + 1,-45 - 2]) {
-        caster_ball_base();
-        caster_ball_top();
+        caster_ball_base(false);
+        caster_ball_top(false);
+
+        // Add bearing
+        caster_ball_bearing(false);
     }
 
     // Support
