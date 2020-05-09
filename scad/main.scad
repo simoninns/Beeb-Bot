@@ -35,6 +35,7 @@ include <chain.scad>
 include <cover.scad>
 include <assemblies.scad>
 include <diagrams.scad>
+include <nema17.scad>
 
 /* [Main] */
 // What should be displayed?
@@ -76,6 +77,9 @@ choose_chain = "None"; // [None, Drive chain]
 
 // Cover - Not complete:
 choose_cover = "None"; // [None, Cover]
+
+// Motor - Not complete:
+choose_motor = "None"; // [None, NEMA 17]
 
 /* [Assembly guide] */
 // Display a sub-assembly diagram:
@@ -145,6 +149,9 @@ module main()
 
         // Cover
         if (choose_cover == "Cover") cover(printMode);
+
+        // Motor
+        if (choose_motor == "NEMA 17") nema17_mount(printMode);
     }
 
     // Display sub-assemblies (according to the original BBC Buggy assembly manual)
