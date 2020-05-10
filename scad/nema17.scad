@@ -136,7 +136,7 @@ module render_nema17_cog_top()
         move([0,0,-9.25]) threaded_rod(d=9, l=6.1, pitch=get_metric_iso_fine_thread_pitch(9), orient=ORIENT_Z, internal=true);
 
         // Add profile for the collettes
-        move([0,0,-9.25 + 7]) cyl(h=15-6 - 1, d1=8.5, d2=7);
+        move([0,0,-9.25 + 7]) cyl(h=15-6 - 1, d1=8.5, d2=6.8);
     }
 }
 
@@ -152,13 +152,13 @@ module render_nema17_cog_bottom()
             cyl(h=5,d=9.5);
 
             move([0,0,-5.5]) threaded_rod(d=9, l=6.0, pitch=get_metric_iso_fine_thread_pitch(9), orient=ORIENT_Z, internal=false);
-            move([0,0,-12.5]) cyl(h=8, d2=8, d1=6.5);
+            move([0,0,-12.5]) cyl(h=8, d2=8, d1=7);
         }
 
         // Add D shaped axle hole
         difference() {
-            move([0,0,-7]) cyl(h=25, d=5.1);
-            move([3.5 - 0.9,0,-7]) cuboid([2, 6, 25]);
+            move([0,0,-7]) cyl(h=25, d=5.2);
+            move([3.5 - 0.4,0,-7]) cuboid([2, 6, 25]);
         }
 
         // Add split
@@ -169,7 +169,7 @@ module render_nema17_cog_bottom()
 module nema17_cog_top(printMode)
 {
     if (printMode) {
-        render_nema17_cog_top();
+        move([0,0,2.5]) rotate([180,0,0]) render_nema17_cog_top();
     } else {
         color([0.2,0.2,0.2]) render_nema17_cog_top();
     }
@@ -178,7 +178,7 @@ module nema17_cog_top(printMode)
 module nema17_cog_bottom(printMode)
 {
     if (printMode) {
-        render_nema17_cog_bottom();
+        move([0,0,2.5]) rotate([180,0,0]) render_nema17_cog_bottom();
     } else {
         color("red") render_nema17_cog_bottom();
     }
