@@ -78,14 +78,17 @@ choose_chain = "None"; // [None, Drive chain]
 // Cover - Not complete:
 choose_cover = "None"; // [None, Cover]
 
-// Motor - Not complete:
-choose_motor = "None"; // [None, NEMA 17]
+// NEMA 17 Motor - Not complete:
+choose_motor = "None"; // [None, NEMA 17 mount, NEMA 17 cog top, NEMA 17 cog bottom]
 
 /* [Assembly guide] */
 // Display a sub-assembly diagram:
 choose_sub_assembly = "None"; // [None, 1 - Lower front cross member, 2 - Lower side members, 3 - Front vertical legs, 4 - Rear vertical legs, 5 - Upper side members, 6 - Upper front and rear cross members, 7 - Rear lower member, 8 - Rear caster support, 9 - Driving wheels assembly, 10 - Ball caster assembly, 11 - Front bumper assembly, 12 - Motors and gears, 13 - PCB supports, 14 - Sensors]
 
 // Display an assembly diagram:
+choose_assembly = "None"; // [None, Step 1, Step 2, Step 3, Step 4, Step 5, Step 6, Step 7, Step 8, Step 9, Complete Robot]
+
+// Display an exploded diagram:
 choose_diagram = "None"; // [None, Complete Robot, Mini-Switch, Ball Caster, Block Hinge]
 
 // Main function module
@@ -151,7 +154,9 @@ module main()
         if (choose_cover == "Cover") cover(printMode);
 
         // Motor
-        if (choose_motor == "NEMA 17") nema17_mount(printMode);
+        if (choose_motor == "NEMA 17 mount") nema17_mount(printMode);
+        if (choose_motor == "NEMA 17 cog top") nema17_cog_top(printMode);
+        if (choose_motor == "NEMA 17 cog bottom") nema17_cog_bottom(printMode);
     }
 
     // Display sub-assemblies (according to the original BBC Buggy assembly manual)
@@ -175,8 +180,18 @@ module main()
         if (choose_sub_assembly == "13 - PCB supports") sub_assembly_13(true);
         if (choose_sub_assembly == "14 - Sensors") sub_assembly_14(true);
 
+        if (choose_assembly == "Step 1") assembly_step_1();
+        if (choose_assembly == "Step 2") assembly_step_2();
+        if (choose_assembly == "Step 3") assembly_step_3();
+        if (choose_assembly == "Step 4") assembly_step_4();
+        if (choose_assembly == "Step 5") assembly_step_5();
+        if (choose_assembly == "Step 6") assembly_step_6();
+        if (choose_assembly == "Step 7") assembly_step_7();
+        if (choose_assembly == "Step 8") assembly_step_8();
+        if (choose_assembly == "Step 9") assembly_step_9();
+        if (choose_assembly == "Complete Robot") sub_assembly_complete();
+
         // Other assembly diagrams
-        if (choose_diagram == "Complete Robot") sub_assembly_complete();
         if (choose_diagram == "Mini-Switch") diagram_mini_switch();
         if (choose_diagram == "Ball Caster") diagram_ball_caster();
         if (choose_diagram == "Block Hinge") diagram_block_hinge();

@@ -29,6 +29,7 @@ use <BOSL/nema_steppers.scad>
 
 include <assemblies.scad>
 
+// NEMA 17 motor and motor mount --------------------------------------------------------------------------------------
 module render_nema17_motor()
 {
     // Render the motor with the shaft pointing right and the cable to the back
@@ -89,5 +90,96 @@ module nema17_mount(printMode)
         // Rotate to about 37 degrees to match original motor's mounting position
         //rotate([45,0,0]) render_nema17_motor();
         rotate([45,0,0]) color([0.2,0.2,0.2]) render_nema17_mount();
+    }
+}
+
+// NEMA 17 5mm shaft cog ----------------------------------------------------------------------------------------------
+
+module render_nema17_cog_gear()
+{
+    oc1 = 17 - 2.5; // outer diameter
+    cir1 = 2 * 3.1415927 * (oc1 / 2);
+    nt1 = 10; // number of teeth
+    difference() {
+        rotate([0,0,7.5]) gear(mm_per_tooth=cir1/nt1, number_of_teeth=nt1, thickness=5, pressure_angle=20, backlash=0.1, hole_diameter=0);
+
+        move([0,0,2]) {
+            difference() {
+                move([0,0,0.1]) cyl(h=1.1, d=18);
+                cyl(h=1, d1=18, d2=10.75);
+                cyl(h=1, d=10.75);
+            }
+        }
+
+        rotate([0,180,0]) move([0,0,2]) {
+            difference() {
+                move([0,0,0.1]) cyl(h=1.1, d=18);
+                cyl(h=1, d1=18, d2=10.75);
+                cyl(h=1, d=10.75);
+            }
+        }
+    }
+}
+
+module render_nema17_cog_top()
+{
+    difference() {
+        union() {
+            render_cog_gear();
+            move([0,0,-4.75]) cyl(h=9.5+5, d=11);
+        }
+
+        // add 5mm axle hole
+        move([0,0,-5]) cyl(h=20, d=5.5);
+
+        // Add a thread
+        move([0,0,-9.25]) threaded_rod(d=9, l=6.1, pitch=get_metric_iso_fine_thread_pitch(9), orient=ORIENT_Z, internal=true);
+
+        // Add profile for the collettes
+        move([0,0,-9.25 + 7]) cyl(h=15-6 - 1, d1=8.5, d2=7);
+    }
+}
+
+module render_nema17_cog_bottom()
+{
+    difference() {
+        union() {
+            oc1 = 11 - 1; // outer diameter
+            cir1 = 2 * 3.1415927 * (oc1 / 2);
+            nt1 = 16; // number of teeth
+
+            gear(mm_per_tooth=cir1/nt1, number_of_teeth=nt1, thickness=5, pressure_angle=1, backlash=0.01, hole_diameter=4);
+            cyl(h=5,d=9.5);
+
+            move([0,0,-5.5]) threaded_rod(d=9, l=6.0, pitch=get_metric_iso_fine_thread_pitch(9), orient=ORIENT_Z, internal=false);
+            move([0,0,-12.5]) cyl(h=8, d2=8, d1=6.5);
+        }
+
+        // Add D shaped axle hole
+        difference() {
+            move([0,0,-7]) cyl(h=25, d=5.1);
+            move([3.5 - 0.9,0,-7]) cuboid([2, 6, 25]);
+        }
+
+        // Add split
+        move([0,0,-10]) cuboid([1,10,15]);
+    }
+}
+
+module nema17_cog_top(printMode)
+{
+    if (printMode) {
+        render_nema17_cog_top();
+    } else {
+        color([0.2,0.2,0.2]) render_nema17_cog_top();
+    }
+}
+
+module nema17_cog_bottom(printMode)
+{
+    if (printMode) {
+        render_nema17_cog_bottom();
+    } else {
+        color("red") render_nema17_cog_bottom();
     }
 }

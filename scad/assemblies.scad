@@ -38,6 +38,8 @@ include <cover.scad>
 include <link.scad>
 include <caster_ball.scad>
 
+// Sub-assembly diagrams ----------------------------------------------------------------------------------------------
+
 // 1 - Lower front cross member
 module sub_assembly_1(standalone)
 {
@@ -71,8 +73,9 @@ module sub_assembly_1(standalone)
     }
 
     // Links
-    rotate([90,0,0]) move([20,-30,45 - 2]) link(1, false);
-    rotate([90,0,0]) move([-20,-30,45 - 2]) link(1, false);
+    linkpos = standalone ? 0:18;
+    rotate([90,0,0]) move([20 + linkpos,-30,45 - 2]) link(1, false);
+    rotate([90,0,0]) move([-20 - linkpos,-30,45 - 2]) link(1, false);
 }
 
 // 2 - Lower side members
@@ -438,4 +441,91 @@ module sub_assembly_complete()
     sub_assembly_12(false);
     sub_assembly_13(false);
     sub_assembly_14(false);
+}
+
+// Assembly diagrams --------------------------------------------------------------------------------------------------
+
+module assembly_step_1()
+{
+    sub_assembly_1(false);
+    sub_assembly_3(false);
+}
+
+module assembly_step_2()
+{
+    sub_assembly_1(false);
+    sub_assembly_2(true);
+    sub_assembly_3(false);
+}
+
+module assembly_step_3()
+{
+    sub_assembly_1(false);
+    sub_assembly_2(false);
+    sub_assembly_3(false);
+}
+
+module assembly_step_4()
+{
+    sub_assembly_1(false);
+    sub_assembly_2(false);
+    sub_assembly_3(false);
+    sub_assembly_4(false);
+}
+
+module assembly_step_5()
+{
+    sub_assembly_1(false);
+    sub_assembly_2(false);
+    sub_assembly_3(false);
+    sub_assembly_4(false);
+    sub_assembly_5(false);
+}
+
+module assembly_step_6()
+{
+    sub_assembly_1(false);
+    sub_assembly_2(false);
+    sub_assembly_3(false);
+    sub_assembly_4(false);
+    sub_assembly_5(false);
+    sub_assembly_6(false);
+}
+
+module assembly_step_7()
+{
+    sub_assembly_1(false);
+    sub_assembly_2(false);
+    sub_assembly_3(false);
+    sub_assembly_4(false);
+    sub_assembly_5(false);
+    sub_assembly_6(false);
+    sub_assembly_7(false);
+}
+
+module assembly_step_8()
+{
+    sub_assembly_1(false);
+    sub_assembly_2(false);
+    sub_assembly_3(false);
+    sub_assembly_4(false);
+    sub_assembly_5(false);
+    sub_assembly_6(false);
+    sub_assembly_7(false);
+    sub_assembly_8(false);
+    sub_assembly_10(false);
+}
+
+module assembly_step_9()
+{
+    sub_assembly_1(false);
+    sub_assembly_2(false);
+    sub_assembly_3(false);
+    sub_assembly_4(false);
+    sub_assembly_5(false);
+    sub_assembly_6(false);
+    sub_assembly_7(false);
+    sub_assembly_8(false);
+    sub_assembly_10(false);
+    sub_assembly_9(false);
 }
