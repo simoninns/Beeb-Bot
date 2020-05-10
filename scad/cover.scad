@@ -29,34 +29,86 @@ use <BOSL/shapes.scad>
 include <alu_profile.scad>
 include <assemblies.scad>
 
+module render_cover_base()
+{
+    difference() {
+        union() {
+            // Base of cover
+            move([0,0,47.5]) difference() {
+                cuboid([120 + 4 + 2,120 + 4 + 2,14], chamfer = 1, edges=EDGES_Z_ALL);
+                cuboid([120 + 2,120 + 2,15]);
+            }
+
+            // Top indent
+            move([-58.5,0,53.5]) cuboid([5,70,2]);
+            move([58.5,0,53.5]) cuboid([5,70,2]);
+
+            // Holding tabs
+            move([-59.5,0,43]) cuboid([3,70,2.5], chamfer=1, edges=EDGES_RIGHT);
+            move([59.5,0,43]) cuboid([3,70,2.5], chamfer=1, edges=EDGES_LEFT);
+
+            move([0,0,61.5]) difference() {
+                union() {
+                    // Top of cover
+                    difference() {
+                        cuboid([120 + 4 + 2,120 + 4 + 2,14], chamfer = 1, edges=EDGES_Z_ALL);
+
+                        // Main body cut-out
+                        cuboid([120 + 2,120 + 2,15]);
+                    }
+
+                    // Indents
+                    move([-59.5,0,0]) cuboid([5 + 2,70,14]);
+                    move([59.5,0,0]) cuboid([5 + 2,70,14]);
+                }
+
+                // Cut-out indents
+                move([-59.5 - 2,0,0]) cuboid([7,70 - 4,15]);
+                move([59.5 + 2,0,0]) cuboid([7,70 - 4,15]);
+            }
+        }
+
+        // Cut-out to allow access to ports
+        move([0,0,46]) cuboid([95,130,40], fillet = 5, edges=EDGES_Y_ALL);
+    }
+}
+
+module render_cover_top_pattern()
+{
+    patWidth = 150;
+    move([0,0,69])difference() {
+        rotate([0,0,45]) {
+            for (pos = [0:10:patWidth]) {
+                move([0,pos - patWidth / 2,0]) cuboid([patWidth,5,10]);
+            }
+        }
+
+        difference() {
+            cyl(h=12, d=patWidth + 100, $fn=60);
+            cyl(h=13, d=110, $fn=60);
+        }
+    }
+}
+
+module render_cover_top()
+{
+    // Lid
+    move([0,0,69.5]) difference() {
+        cuboid([120 + 4 + 2,120 + 4 + 2,2], chamfer = 1, edges=EDGES_Z_ALL+EDGES_TOP);
+
+        // Cut-out indents
+        move([-59.5 - 2,0,0]) cuboid([7,70 - 4,15]);
+        move([59.5 + 2,0,0]) cuboid([7,70 - 4,15]);
+    }
+}
+
 module render_cover()
 {
-    // Base of cover
-    move([0,0,47.5]) difference() {
-        cuboid([120 + 4 + 2,120 + 4 + 2,14], chamfer = 1, edges=EDGES_Z_ALL);
-        cuboid([120 + 2,120 + 2,15]);
+    render_cover_base();
+    difference() {
+        render_cover_top();
+        render_cover_top_pattern();
     }
-
-    // Top indent
-    move([-58.5,0,53.5]) cuboid([5,70,2]);
-    move([58.5,0,53.5]) cuboid([5,70,2]);
-
-    // Holding tabs
-    move([-59.5,0,43]) cuboid([3,70,2.5], chamfer=1, edges=EDGES_RIGHT);
-    move([59.5,0,43]) cuboid([3,70,2.5], chamfer=1, edges=EDGES_LEFT);
-
-    // Top of cover
-    move([0,0,61.5]) difference() {
-        cuboid([120 + 4 + 2,120 + 4 + 2,14], chamfer = 1, edges=EDGES_Z_ALL);
-        cuboid([120 + 2,120 + 2,15]);
-
-        // Indents
-        move([-58.5 - 1.5,0,0]) cuboid([5 + 3,70,15]);
-        move([58.5 + 1.5,0,0]) cuboid([5 + 3,70,15]);
-    }
-
-    // Lid
-    move([0,0,69.5]) cuboid([120 + 4 + 2,120 + 4 + 2,2], chamfer = 1, edges=EDGES_Z_ALL+EDGES_TOP);
 }
 
 module cover(printMode)
@@ -65,6 +117,6 @@ module cover(printMode)
         rotate([180,0,0]) move([0,0,-16]) render_cover();
     } else {
         //assembly_step_8();
-        render_cover();
+        color("red") render_cover();
     }
 }
