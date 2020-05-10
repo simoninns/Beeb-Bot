@@ -27,33 +27,36 @@ use <BOSL/transforms.scad>
 use <BOSL/shapes.scad>
 
 include <alu_profile.scad>
+include <assemblies.scad>
 
-// Note: The cover is designed to be quite thin in order to be
-// as transparent as possible when printed with clear filament
 module render_cover()
 {
-    width=125;
-    thickn=1;
-    height=32;
+    // Base of cover
+    move([0,0,47.5]) difference() {
+        cuboid([120 + 4 + 2,120 + 4 + 2,14], chamfer = 1, edges=EDGES_Z_ALL);
+        cuboid([120 + 2,120 + 2,15]);
+    }
 
-    difference() {
-        cuboid([width,width,height], chamfer=2, edges=EDGES_ALL-EDGES_BOTTOM); 
-        
-        move([0,0,-thickn]) cuboid([width - (thickn*2),width - (thickn*2),height], chamfer=2, edges=EDGES_ALL-EDGES_BOTTOM);
-        move([0,0,-5]) cuboid([97,width + 2,height], fillet=5, edges=EDGES_Y_ALL);
+    // Top indent
+    move([-58.5,0,53.5]) cuboid([5,70,2]);
+    move([58.5,0,53.5]) cuboid([5,70,2]);
 
-        move([0,0,(height / 2) - 1.2]) cyl(h=1.2, d=width-8, $fn=60);
+    // Holding tabs
+    move([-59.5,0,43]) cuboid([3,70,2.5], chamfer=1, edges=EDGES_RIGHT);
+    move([59.5,0,43]) cuboid([3,70,2.5], chamfer=1, edges=EDGES_LEFT);
+
+    // Top of cover
+    move([0,0,61.5]) difference() {
+        cuboid([120 + 4 + 2,120 + 4 + 2,14], chamfer = 1, edges=EDGES_Z_ALL);
+        cuboid([120 + 2,120 + 2,15]);
+
+        // Indents
+        move([-58.5 - 1.5,0,0]) cuboid([5 + 3,70,15]);
+        move([58.5 + 1.5,0,0]) cuboid([5 + 3,70,15]);
     }
-    
-    // Frame clips
-    difference() {
-        move([((width - (thickn*2)) / 2),0, -(height/2) + 5]) cuboid([3,width / 3,3.5], chamfer=1.5);
-        move([((width - (thickn*2)) / 2) + 1.5,0, -(height/2) + 5]) cuboid([3,width / 3,3.5]);
-    }
-    difference() {
-        move([-((width - (thickn*2)) / 2),0, -(height/2) + 5]) cuboid([3,width / 3,3.5], chamfer=1.5);
-        move([-((width - (thickn*2)) / 2) - 1.5,0, -(height/2) + 5]) cuboid([3,width / 3,3.5]);
-    }
+
+    // Lid
+    move([0,0,69.5]) cuboid([120 + 4 + 2,120 + 4 + 2,2], chamfer = 1, edges=EDGES_Z_ALL+EDGES_TOP);
 }
 
 module cover(printMode)
@@ -61,6 +64,7 @@ module cover(printMode)
     if (printMode) {
         rotate([180,0,0]) move([0,0,-16]) render_cover();
     } else {
-        color("white") render_cover();
+        //assembly_step_8();
+        render_cover();
     }
 }

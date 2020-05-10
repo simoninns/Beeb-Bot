@@ -89,7 +89,7 @@ choose_sub_assembly = "None"; // [None, 1 - Lower front cross member, 2 - Lower 
 choose_assembly = "None"; // [None, Step 1, Step 2, Step 3, Step 4, Step 5, Step 6, Step 7, Step 8, Step 9, Complete Robot]
 
 // Display an exploded diagram:
-choose_diagram = "None"; // [None, Complete Robot, Mini-Switch, Ball Caster, Block Hinge]
+choose_diagram = "None"; // [None, Mini-Switch, Ball Caster, Block Hinge]
 
 // Main function module
 module main()

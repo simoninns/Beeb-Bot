@@ -34,7 +34,6 @@ include <mini_switch.scad>
 include <hinge.scad>
 include <hub.scad>
 include <cogs_and_wheels.scad>
-include <cover.scad>
 include <link.scad>
 include <caster_ball.scad>
 
