@@ -109,16 +109,12 @@ module column_body(length, cap_mount)
 module v_profile(vlength)
 {
     difference() {
-        union() {
-            cuboid([vlength,1,2.8]);
-
-            move([0,1.5,-1.2]) rotate([74,0,0]) cuboid([vlength,1,3.25]);
-            move([0,1.5,1.2]) rotate([-74,0,0]) cuboid([vlength,1,3.25]);
-
-            move([0,2,-1.25]) rotate([0,90,0]) cyl(h=vlength, d=1.5);
-            move([0,2,1.25]) rotate([0,90,0]) cyl(h=vlength, d=1.5);
-        }
-        move([0,2.75,0]) cuboid([vlength+1,1,6]);
-        move([0,2,0]) cuboid([vlength + 1, 1, 1.4]);   
+        rotate([-90,0,0]) render_pin(vlength + 3, 2.5);
+        move([(vlength / 2) + 1.5,0,0]) cuboid([3,4,4]);
+        move([-(vlength / 2) - 1.5,0,0]) cuboid([3,4,4]);
+        move([0,2,0]) rotate([45,0,0]) cuboid([vlength + 3, 2, 2]);
+        move([0,1,0]) cuboid([vlength + 3, 1, 0.75]);
     }
+
+    
 }
