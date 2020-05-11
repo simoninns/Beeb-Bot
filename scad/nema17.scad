@@ -154,7 +154,7 @@ module render_nema17_cog_bottom()
             cyl(h=5,d=9.5);
 
             move([0,0,-5.5]) threaded_rod(d=9, l=6.0, pitch=get_metric_iso_fine_thread_pitch(9), orient=ORIENT_Z, internal=false);
-            move([0,0,-11]) cyl(h=5, d2=8, d1=7);
+            move([0,0,-11]) cyl(h=5, d2=8, d1=7.2);
         }
 
         // Add D shaped axle hole

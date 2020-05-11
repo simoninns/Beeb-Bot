@@ -220,19 +220,29 @@ module single_wheel_assembly()
     rotate([0,90,0]) color("silver") cyl(h=80, d=4);
 
     // Wheel
-    move([40 - 7.5,0,0]) rotate([0,90,0]) hub_top(false);
-    move([40 - 7.5 - 2,0,0]) rotate([0,90,0]) large_pulley_wheel(false);
-    move([40 - 7.5 - 4,0,0]) rotate([0,90,0]) hub_base(false);
+    move([40 - 7.5,0,0]) {
+        move([0,0,0]) rotate([0,90,0]) hub_top(false);
+        move([-2,0,0]) rotate([0,90,0]) large_pulley_wheel(false);
+        move([-4,0,0]) rotate([0,90,0]) hub_base(false);
+    }
+
+    // Locking washers
+    move([40 - 13 ,0,0]) {
+        move([0 ,0,0]) rotate([0,90,0]) locking_washer(false);
+        move([-2.1 ,0,0]) rotate([0,90,0]) locking_washer(false);
+    }
     
     // V-axle joiners
-    move([40 - 15,0,16.5]) rotate([0,90,0]) color("red") single_vaxle();
-    rotate([120,0,0]) move([40 - 15,0,16.5]) rotate([0,90,0]) color("red") single_vaxle();
-    rotate([240,0,0]) move([40 - 15,0,16.5]) rotate([0,90,0]) color("red") single_vaxle();
+    move([40 - 14,0,16.5]) rotate([0,90,0]) color("red") single_vaxle();
+    rotate([120,0,0]) move([40 - 14,0,16.5]) rotate([0,90,0]) color("red") single_vaxle();
+    rotate([240,0,0]) move([40 - 14,0,16.5]) rotate([0,90,0]) color("red") single_vaxle();
     
     // Gear
-    move([40 - 20.5 ,0,0]) rotate([0,90,0]) gear_wheel(false);
-    move([40 - 19,0,0]) rotate([0,-90,0]) hub_base(false);
-    move([40 - 22,0,0]) rotate([0,-90,0]) hub_top(false);
+    move([40 - 18.5 ,0,0]) {
+        rotate([0,90,0]) gear_wheel(false);
+        move([2,0,0]) rotate([0,-90,0]) hub_base(false);
+        move([-1.5,0,0]) rotate([0,-90,0]) hub_top(false);
+    }
 
     // Inside clips
     move([-30,0,0]) rotate([0,90,0]) clip10(false);
@@ -241,8 +251,8 @@ module single_wheel_assembly()
     move([30.5,0,0]) rotate([0,90,0]) color([0.2,0.2,0.2]) torus(d=62.5, d2=3);
 
     // M4 washers
-    move([8.5,0,0]) rotate([0,90,0]) color("grey") tube(h=0.75, id=5, od=7);
-    move([7.5,0,0]) rotate([0,90,0]) color("grey") tube(h=0.75, id=5, od=7);
+    move([11,0,0]) rotate([0,90,0]) color("grey") tube(h=0.75, id=5, od=7);
+    move([10,0,0]) rotate([0,90,0]) color("grey") tube(h=0.75, id=5, od=7);
     move([-24.5,0,0]) rotate([0,90,0]) color("grey") tube(h=0.75, id=5, od=7);
 }
 
@@ -355,7 +365,7 @@ module render_single_motor()
     }
 
     // Add cog wheel to shaft
-    rotate([0,0,0]) move([0,0,42]){
+    rotate([0,0,0]) move([0,0,44]){
         cog_wheel_bottom(false);
         move([0,0,-14.5]) rotate([180,0,0]) cog_wheel_top(false);
     }

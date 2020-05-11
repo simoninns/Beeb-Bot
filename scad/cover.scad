@@ -35,24 +35,24 @@ module render_cover_base()
         union() {
             // Base of cover
             move([0,0,47.5]) difference() {
-                cuboid([120 + 4 + 2,120 + 4 + 2,14], chamfer = 1, edges=EDGES_Z_ALL);
-                cuboid([120 + 2,120 + 2,15]);
+                cuboid([120 + 3 + 2,120 + 4 + 2,14], chamfer = 1, edges=EDGES_Z_ALL);
+                cuboid([120 + 1,120 + 2,15]);
             }
 
             // Top indent
-            move([-58.5,0,53.5]) cuboid([5,70,2]);
-            move([58.5,0,53.5]) cuboid([5,70,2]);
+            move([-58,0,53.5]) cuboid([5,70,2]);
+            move([58,0,53.5]) cuboid([5,70,2]);
 
             // Holding tabs
             // Note, these need a triangular base in order to be
             // printable
-            move([-59.5,0,43]) {
+            move([-59,0,43]) {
                 difference() {
                 right_triangle([3, 50, 3], center=true);
                 move([1,0,-1]) cuboid([1,71,3]);
                 }
             }
-            rotate([0,0,180]) move([-59.5,0,43]) {
+            rotate([0,0,180]) move([-59,0,43]) {
                 difference() {
                 right_triangle([3, 50, 3], center=true);
                 move([1,0,-1]) cuboid([1,71,3]);
@@ -63,20 +63,20 @@ module render_cover_base()
                 union() {
                     // Top of cover
                     difference() {
-                        cuboid([120 + 4 + 2,120 + 4 + 2,14], chamfer = 1, edges=EDGES_Z_ALL);
+                        cuboid([120 + 3 + 2,120 + 4 + 2,14], chamfer = 1, edges=EDGES_Z_ALL);
 
                         // Main body cut-out
-                        cuboid([120 + 2,120 + 2,15]);
+                        cuboid([120 + 1,120 + 2,15]);
                     }
 
                     // Indents
-                    move([-59.5,0,0]) cuboid([5 + 2,70,14]);
-                    move([59.5,0,0]) cuboid([5 + 2,70,14]);
+                    move([-58.5,0,0]) cuboid([5 + 1,70,14]);
+                    move([58.5,0,0]) cuboid([5 + 1,70,14]);
                 }
 
                 // Cut-out indents
-                move([-59.5 - 2,0,0]) cuboid([7,70 - 4,15]);
-                move([59.5 + 2,0,0]) cuboid([7,70 - 4,15]);
+                move([-59 - 2,0,0]) cuboid([7,70 - 4,15]);
+                move([59 + 2,0,0]) cuboid([7,70 - 4,15]);
             }
         }
 
@@ -85,11 +85,11 @@ module render_cover_base()
     }
 
     // Angle cut-outs to make it easier to print
-    move([59.5,0,61.5 - 3.5]) right_triangle([7, 70, 7], center=true);
-    rotate([0,0,180])move([59.5,0,61.5 - 3.5]) right_triangle([7, 70, 7], center=true);
+    move([59,0,61.5 - 3.5]) right_triangle([7, 70, 7], center=true);
+    rotate([0,0,180])move([59,0,61.5 - 3.5]) right_triangle([7, 70, 7], center=true);
 }
 
-module render_cover_top_pattern()
+module render_cover_top_pattern1()
 {
     patWidth = 150;
     difference() {
@@ -141,16 +141,16 @@ module render_cover_top()
 {
     // Lid
     move([0,0,69.5]) difference() {
-        cuboid([120 + 4 + 2,120 + 4 + 2,2], chamfer = 1, edges=EDGES_Z_ALL+EDGES_TOP);
+        cuboid([120 + 3 + 2,120 + 4 + 2,2], chamfer = 1, edges=EDGES_Z_ALL+EDGES_TOP);
 
         // Cut-out indents
-        move([-59.5 - 2,0,0]) cuboid([7,70 - 4,15]);
-        move([59.5 + 2,0,0]) cuboid([7,70 - 4,15]);
+        move([-59 - 2,0,0]) cuboid([7,70 - 4,15]);
+        move([59 + 2,0,0]) cuboid([7,70 - 4,15]);
 
         // Chamfer indents
         move([0,0,7.5]) {
-            move([-59.5 - 2,0,0]) cuboid([9,70 - 2,15], chamfer=1);
-            move([59.5 + 2,0,0]) cuboid([9,70 - 2,15], chamfer=1);
+            move([-59 - 2,0,0]) cuboid([9,70 - 2,15], chamfer=1);
+            move([59 + 2,0,0]) cuboid([9,70 - 2,15], chamfer=1);
         }
     }
 }
@@ -160,7 +160,7 @@ module render_cover()
     render_cover_base();
     difference() {
         render_cover_top();
-        render_cover_top_pattern();
+        render_cover_top_pattern1();
     }
 }
 
