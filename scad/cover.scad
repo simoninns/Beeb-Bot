@@ -89,52 +89,22 @@ module render_cover_base()
     rotate([0,0,180])move([59,0,61.5 - 3.5]) right_triangle([7, 70, 7], center=true);
 }
 
+// Tessellated hexagon pattern
 module render_cover_top_pattern1()
 {
-    patWidth = 150;
-    difference() {
-        union() {
-            move([0,0,69]) difference() {
-                rotate([0,0,-45]) {
-                    for (pos = [0:10:patWidth]) {
-                        move([0,pos - patWidth / 2,0]) cuboid([patWidth,5,10]);
-                    }
+    move([-49,-54,70]) {
+        for (ypos = [0:8:13*8]) {
+            move([0,ypos,0]) {
+                for (xpos = [0:14:14*7]) {
+                    move ([xpos,0,0]) cyl(h=10, d=8, $fn=6);
                 }
 
-                difference() {
-                    cyl(h=12, d=patWidth + 100, $fn=60);
-                    cyl(h=13, d=110, $fn=60);
-                    
+                for (xpos = [0:14:13*7]) {
+                    move ([xpos + 7,4,0]) cyl(h=10, d=8, $fn=6);
                 }
-
-                move([55 / 2,0,0]) cuboid([55,110,13]);
-            }
-
-            move([0,0,69]) difference() {
-                rotate([0,0,45]) {
-                    for (pos = [0:10:patWidth]) {
-                        move([0,pos - patWidth / 2,0]) cuboid([patWidth,5,10]);
-                    }
-                }
-
-                difference() {
-                    cyl(h=12, d=patWidth + 100, $fn=60);
-                    cyl(h=13, d=110, $fn=60);
-                }
-
-                move([-(55 / 2),0,0]) cuboid([55,110,13]);
             }
         }
-
-        // Add additional decoration
-        move([0,0,69]) cuboid([5,110,10]);
-        move([0,0,69]) difference() {
-            cyl(h=10, d=82.5, $fn=60);
-            cyl(h=10, d=82.5 - 10, $fn=60);
-        }
-        move([0,0,69]) cyl(h=10, d=62.5 - 30, $fn=60);
     }
-    move([0,0,69]) cyl(h=10, d=62.5 - 40, $fn=60);
 }
 
 module render_cover_top()
