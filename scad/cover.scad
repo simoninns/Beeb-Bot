@@ -44,8 +44,20 @@ module render_cover_base()
             move([58.5,0,53.5]) cuboid([5,70,2]);
 
             // Holding tabs
-            move([-59.5,0,43]) cuboid([3,70,2.5], chamfer=1, edges=EDGES_RIGHT);
-            move([59.5,0,43]) cuboid([3,70,2.5], chamfer=1, edges=EDGES_LEFT);
+            // Note, these need a triangular base in order to be
+            // printable
+            move([-59.5,0,43]) {
+                difference() {
+                right_triangle([3, 50, 3], center=true);
+                move([1,0,-1]) cuboid([1,71,3]);
+                }
+            }
+            rotate([0,0,180]) move([-59.5,0,43]) {
+                difference() {
+                right_triangle([3, 50, 3], center=true);
+                move([1,0,-1]) cuboid([1,71,3]);
+                }
+            }
 
             move([0,0,61.5]) difference() {
                 union() {
@@ -71,23 +83,58 @@ module render_cover_base()
         // Cut-out to allow access to ports
         move([0,0,46]) cuboid([95,130,40], fillet = 5, edges=EDGES_Y_ALL);
     }
+
+    // Angle cut-outs to make it easier to print
+    move([59.5,0,61.5 - 3.5]) right_triangle([7, 70, 7], center=true);
+    rotate([0,0,180])move([59.5,0,61.5 - 3.5]) right_triangle([7, 70, 7], center=true);
 }
 
 module render_cover_top_pattern()
 {
     patWidth = 150;
-    move([0,0,69])difference() {
-        rotate([0,0,45]) {
-            for (pos = [0:10:patWidth]) {
-                move([0,pos - patWidth / 2,0]) cuboid([patWidth,5,10]);
+    difference() {
+        union() {
+            move([0,0,69]) difference() {
+                rotate([0,0,-45]) {
+                    for (pos = [0:10:patWidth]) {
+                        move([0,pos - patWidth / 2,0]) cuboid([patWidth,5,10]);
+                    }
+                }
+
+                difference() {
+                    cyl(h=12, d=patWidth + 100, $fn=60);
+                    cyl(h=13, d=110, $fn=60);
+                    
+                }
+
+                move([55 / 2,0,0]) cuboid([55,110,13]);
+            }
+
+            move([0,0,69]) difference() {
+                rotate([0,0,45]) {
+                    for (pos = [0:10:patWidth]) {
+                        move([0,pos - patWidth / 2,0]) cuboid([patWidth,5,10]);
+                    }
+                }
+
+                difference() {
+                    cyl(h=12, d=patWidth + 100, $fn=60);
+                    cyl(h=13, d=110, $fn=60);
+                }
+
+                move([-(55 / 2),0,0]) cuboid([55,110,13]);
             }
         }
 
-        difference() {
-            cyl(h=12, d=patWidth + 100, $fn=60);
-            cyl(h=13, d=110, $fn=60);
+        // Add additional decoration
+        move([0,0,69]) cuboid([5,110,10]);
+        move([0,0,69]) difference() {
+            cyl(h=10, d=82.5, $fn=60);
+            cyl(h=10, d=82.5 - 10, $fn=60);
         }
+        move([0,0,69]) cyl(h=10, d=62.5 - 30, $fn=60);
     }
+    move([0,0,69]) cyl(h=10, d=62.5 - 40, $fn=60);
 }
 
 module render_cover_top()
@@ -99,6 +146,12 @@ module render_cover_top()
         // Cut-out indents
         move([-59.5 - 2,0,0]) cuboid([7,70 - 4,15]);
         move([59.5 + 2,0,0]) cuboid([7,70 - 4,15]);
+
+        // Chamfer indents
+        move([0,0,7.5]) {
+            move([-59.5 - 2,0,0]) cuboid([9,70 - 2,15], chamfer=1);
+            move([59.5 + 2,0,0]) cuboid([9,70 - 2,15], chamfer=1);
+        }
     }
 }
 
@@ -114,9 +167,8 @@ module render_cover()
 module cover(printMode)
 {
     if (printMode) {
-        rotate([180,0,0]) move([0,0,-16]) render_cover();
+        rotate([180,0,0]) move([0,0,-70.5]) render_cover();
     } else {
-        //assembly_step_8();
         color("red") render_cover();
     }
 }
