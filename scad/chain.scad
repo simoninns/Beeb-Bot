@@ -55,9 +55,9 @@ module render_chain_link()
             rotate([180,0,0]) render_chain_cap();
             
             // Draw bars
-            move([-2.75,0,0]) cyl(h=7.0,d=2.25);
-            move([-2.75,0,4.0]) cyl(h=1.75,d1=2, d2=1.25);
-            move([-2.75,0,-4.0]) cyl(h=1.75,d2=2, d1=1.25);
+            move([-2.75,0,0]) cyl(h=7.0,d=2.25); // Main bar
+            move([-2.75,0,4.25]) cyl(h=2,d1=2, d2=1.25); // Top cone
+            move([-2.75,0,-4.25]) cyl(h=2,d2=2, d1=1.25); // Bottom code
         }
         // Add holes
         move([1.9,0,0]) cyl(h=11,d=2.25);
