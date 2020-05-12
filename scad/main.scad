@@ -75,10 +75,10 @@ choose_caster = "None"; // [None, Ball caster holder, Ball caster base, Ball cas
 // Drive chain:
 choose_chain = "None"; // [None, Drive chain]
 
-// Cover - Not complete:
+// Cover:
 choose_cover = "None"; // [None, Cover]
 
-// NEMA 17 Motor - Not complete:
+// NEMA 17 Motor:
 choose_motor = "None"; // [None, NEMA 17 mount, NEMA 17 cog top, NEMA 17 cog bottom]
 
 /* [Assembly guide] */

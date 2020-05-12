@@ -28,20 +28,23 @@ use <BOSL/shapes.scad>
 
 module render_chain_cap()
 {
-    move([0,0,9.5 / 2 - (0.9 / 2)]) {
+    move([0,0,9.0 / 2 - (0.9 / 2)]) {
         difference() {
             union() {
-                move([-2,0,-1]) cyl(h=1, d=4);
-                move([2,0,0.25]) cyl(h=1, d=4);
-                move([1.5,0,0.25]) cuboid([1.55,4,1]);
-                move([-1.5,0,-1]) cuboid([1.5,4,1]);
+                // Lower
+                move([-1.9,0,-1]) cyl(h=1, d=4);
+                move([-1.4,0,-1]) cuboid([1.5,4,1]);
+
+                // Upper
+                move([1.9,0,0.25]) cyl(h=1, d=4);
+                move([1.4,0,0.25]) cuboid([1.5,4,1]);
+                
             }
-            cuboid([1.5,4,10]);
+            cuboid([1.4,4,10]);
         }
         
     }
-
-    move([-0.75,0,3.3]) rotate([0,90,0]) prismoid(size1=[1,4], size2=[1,4], h=1.5, shift=[-1.25,0]);
+    move([0,0,3.06]) rotate([0,90,0]) prismoid(size1=[1,4], size2=[1,4], h=1.4, shift=[-1.25,0], center=true);
 }
 
 module render_chain_link()
@@ -52,19 +55,19 @@ module render_chain_link()
             rotate([180,0,0]) render_chain_cap();
             
             // Draw bars
-            move([-2.75,0,0]) cyl(h=7.5,d=2.25);
-            move([-2.75,0,4.5]) cyl(h=1.75,d1=2, d2=1.25);
-            move([-2.75,0,-4.5]) cyl(h=1.75,d2=2, d1=1.25);
+            move([-2.75,0,0]) cyl(h=7.0,d=2.25);
+            move([-2.75,0,4.0]) cyl(h=1.75,d1=2, d2=1.25);
+            move([-2.75,0,-4.0]) cyl(h=1.75,d2=2, d1=1.25);
         }
         // Add holes
-        move([2,0,0]) cyl(h=11,d=2.25);
-    }   
+        move([1.9,0,0]) cyl(h=11,d=2.25);
+    }
 }
 
 module render_chain(numberOfLinks)
 {
     for (num = [0:numberOfLinks - 1]) {
-        move([num * 4.75,0,0]) render_chain_link();
+        move([num * 4.65,0,0]) render_chain_link();
     }
     
 }
