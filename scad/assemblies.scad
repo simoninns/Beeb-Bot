@@ -294,7 +294,7 @@ module sub_assembly_10(standalone)
     move([3,45 + 15 + 1,-45 - 5]) caster_ball_holder(false);
 
     // Ball holder
-    move([3,45 + 15 + 1,-45 - 2]) {
+    move([3,45 + 15 + 1,-45 - 5]) {
         caster_ball_base(false);
         caster_ball_top(false);
 

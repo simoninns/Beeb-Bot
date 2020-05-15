@@ -132,13 +132,13 @@ module render_caster_ball_base()
 {
     difference() { 
         union() {
-            move([0,0,-6.5]) cyl(h=2,d=30, chamfer=0.5); // Lip
+            move([0,0,-6.5 + 1.5]) cyl(h=2 + 3,d=30, chamfer=0.5); // Lip
             move([0,0,-10.5]) cyl(h=3,d1=16, d2=24, chamfer1=0.5, center=false); // Ball chamfer
         }
 
         // 2x 8mm holes around the circumference of the hub
         move([0,0,-6.5]) zrot_copies(rots=[210,330], r=33/2, subrot=false) {
-            zcyl(h=6, d=8);
+            zcyl(h=10, d=8);
         }
 
         move([0,0,-3.5]) render_ball_bearing(20.5);
@@ -167,7 +167,7 @@ module caster_ball_base(printMode)
 {
     $fn=60;
     if (printMode) {
-        rotate([0,180,0]) move([0,0,5.5]) render_caster_ball_base();
+        rotate([0,180,0]) move([0,0,5.5 - 3]) render_caster_ball_base();
     } else {
         color("lightgrey") render_caster_ball_base();
     }
