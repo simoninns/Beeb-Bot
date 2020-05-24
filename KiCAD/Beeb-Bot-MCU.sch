@@ -85,19 +85,19 @@ Wire Wire Line
 NoConn ~ 6300 4650
 NoConn ~ 6300 3150
 Text GLabel 4550 3750 0    50   Output ~ 0
-L_STEP
+L_Step
 Text GLabel 4550 3850 0    50   Output ~ 0
-L_DIR
+L_Dir
 Text GLabel 6750 3750 2    50   Output ~ 0
-R_STEP
+R_Step
 Text GLabel 6750 3850 2    50   Output ~ 0
-R_DIR
+R_Dir
 Text GLabel 4550 3050 0    50   Output ~ 0
-STEP_M0
+Step_M0
 Text GLabel 4550 2950 0    50   Output ~ 0
-STEP_M1
+Step_M1
 Text GLabel 4550 2850 0    50   Output ~ 0
-STEP_M2
+Step_M2
 Wire Wire Line
 	4550 3050 4750 3050
 Wire Wire Line
@@ -129,7 +129,7 @@ Wire Wire Line
 Wire Wire Line
 	4550 3850 4750 3850
 $Sheet
-S 10200 750  800  850 
+S 10200 750  800  950 
 U 5ECA12E7
 F0 "Motor Drivers" 50
 F1 "motor_drivers.sch" 50
@@ -140,21 +140,22 @@ F5 "Step_M1" I L 10200 1400 50
 F6 "Step_M2" I L 10200 1500 50 
 F7 "R_Step" I L 10200 1050 50 
 F8 "R_Dir" I L 10200 1150 50 
+F9 "Step_EN" I L 10200 1600 50 
 $EndSheet
 Text GLabel 9950 850  0    50   Input ~ 0
-L_STEP
+L_Step
 Text GLabel 9950 950  0    50   Input ~ 0
-L_DIR
+L_Dir
 Text GLabel 9950 1050 0    50   Input ~ 0
-R_STEP
+R_Step
 Text GLabel 9950 1150 0    50   Input ~ 0
-R_DIR
+R_Dir
 Text GLabel 9950 1500 0    50   Input ~ 0
-STEP_M2
+Step_M2
 Text GLabel 9950 1400 0    50   Input ~ 0
-STEP_M1
+Step_M1
 Text GLabel 9950 1300 0    50   Input ~ 0
-STEP_M0
+Step_M0
 Wire Wire Line
 	9950 850  10200 850 
 Wire Wire Line
@@ -170,14 +171,14 @@ Wire Wire Line
 Wire Wire Line
 	9950 1500 10200 1500
 $Sheet
-S 10200 1950 800  550 
+S 10200 2350 800  550 
 U 5ECD6582
 F0 "Raspberry_Pi" 50
 F1 "raspberry_pi.sch" 50
-F2 "Serial_TxD" O L 10200 2050 50 
-F3 "Serial_RxD" I L 10200 2150 50 
-F4 "I2C_SDA" B L 10200 2300 50 
-F5 "I2C_SCL" O L 10200 2400 50 
+F2 "Serial_TxD" O L 10200 2450 50 
+F3 "Serial_RxD" I L 10200 2550 50 
+F4 "I2C_SDA" B L 10200 2700 50 
+F5 "I2C_SCL" O L 10200 2800 50 
 $EndSheet
 Text GLabel 4550 4150 0    50   Input ~ 0
 SCL1
@@ -187,38 +188,46 @@ Wire Wire Line
 	4550 4150 4750 4150
 Wire Wire Line
 	4550 4250 4750 4250
-Text GLabel 9950 2400 0    50   Input ~ 0
+Text GLabel 9950 2800 0    50   Input ~ 0
 SCL1
-Text GLabel 9950 2300 0    50   BiDi ~ 0
+Text GLabel 9950 2700 0    50   BiDi ~ 0
 SDA1
 Wire Wire Line
-	9950 2300 10200 2300
+	9950 2700 10200 2700
 Wire Wire Line
-	9950 2400 10200 2400
+	9950 2800 10200 2800
 $Sheet
-S 10200 2850 800  700 
+S 10200 3250 800  700 
 U 5ECED89D
 F0 "Power Supply" 50
 F1 "power_supply.sch" 50
-F2 "Battery_Sense" O L 10200 2950 50 
+F2 "Battery_Sense" O L 10200 3350 50 
 $EndSheet
-Text GLabel 9950 2950 0    50   Input ~ 0
+Text GLabel 9950 3350 0    50   Input ~ 0
 ADC0
 Wire Wire Line
-	9950 2950 10200 2950
+	9950 3350 10200 3350
 Text GLabel 6750 4050 2    50   Input ~ 0
 RxD_Master
 Text GLabel 6750 4150 2    50   Output ~ 0
 TxD_Master
-Text GLabel 9950 2050 0    50   Input ~ 0
+Text GLabel 9950 2450 0    50   Input ~ 0
 RxD_Master
-Text GLabel 9950 2150 0    50   Output ~ 0
+Text GLabel 9950 2550 0    50   Output ~ 0
 TxD_Master
 Wire Wire Line
-	9950 2050 10200 2050
+	9950 2450 10200 2450
 Wire Wire Line
-	10200 2150 9950 2150
+	10200 2550 9950 2550
 NoConn ~ 6300 4750
 NoConn ~ 4750 3550
 NoConn ~ 4750 3650
+Text GLabel 4550 3150 0    50   Output ~ 0
+Step_EN
+Wire Wire Line
+	4550 3150 4750 3150
+Text GLabel 9950 1600 0    50   Input ~ 0
+Step_EN
+Wire Wire Line
+	9950 1600 10200 1600
 $EndSCHEMATC

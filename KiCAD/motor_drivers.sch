@@ -151,8 +151,6 @@ F 3 "" H 5100 1900 50  0001 C CNN
 $EndComp
 NoConn ~ 5550 2350
 NoConn ~ 5550 4600
-NoConn ~ 5550 2750
-NoConn ~ 5550 5000
 Wire Wire Line
 	5550 5100 5000 5100
 Wire Wire Line
@@ -284,4 +282,15 @@ Text HLabel 5000 5100 0    50   Input ~ 0
 R_Step
 Text HLabel 5000 5200 0    50   Input ~ 0
 R_Dir
+Wire Wire Line
+	5550 5000 5500 5000
+Wire Wire Line
+	5500 5000 5500 2750
+Wire Wire Line
+	5500 2750 5550 2750
+Wire Wire Line
+	5500 2750 5000 2750
+Connection ~ 5500 2750
+Text HLabel 5000 2750 0    50   Input ~ 0
+Step_EN
 $EndSCHEMATC

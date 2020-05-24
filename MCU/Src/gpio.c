@@ -55,7 +55,8 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOA, R_Dir_Pin|R_Step_Pin|L_Step_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, Step_M2_Pin|Step_M1_Pin|Step_M0_Pin|L_Dir_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, Step_M2_Pin|Step_M1_Pin|Step_M0_Pin|Step_EN_Pin 
+                          |L_Dir_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = User_LED_Pin;
@@ -84,8 +85,10 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PBPin PBPin PBPin PBPin */
-  GPIO_InitStruct.Pin = Step_M2_Pin|Step_M1_Pin|Step_M0_Pin|L_Dir_Pin;
+  /*Configure GPIO pins : PBPin PBPin PBPin PBPin 
+                           PBPin */
+  GPIO_InitStruct.Pin = Step_M2_Pin|Step_M1_Pin|Step_M0_Pin|Step_EN_Pin 
+                          |L_Dir_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

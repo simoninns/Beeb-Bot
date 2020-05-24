@@ -78,6 +78,8 @@ void Error_Handler(void);
 #define Step_M1_GPIO_Port GPIOB
 #define Step_M0_Pin GPIO_PIN_14
 #define Step_M0_GPIO_Port GPIOB
+#define Step_EN_Pin GPIO_PIN_15
+#define Step_EN_GPIO_Port GPIOB
 #define L_Step_Pin GPIO_PIN_15
 #define L_Step_GPIO_Port GPIOA
 #define L_Dir_Pin GPIO_PIN_3

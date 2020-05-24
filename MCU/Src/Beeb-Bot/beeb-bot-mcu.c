@@ -25,6 +25,7 @@
 #include "Beeb-Bot/debug.h"
 #include "Beeb-Bot/drv8825.h"
 #include "Beeb-Bot/led.h"
+#include "Beeb-Bot/i2c_slave.h"
 
 #include "gpio.h"
 #include "tim.h"
@@ -32,6 +33,7 @@
 // Beeb-Bot MCU initialisation
 void initialise()
 {
+    // Note: No USART available here for debug
 }
 
 // Timer period elapsed call-back handler
@@ -52,6 +54,9 @@ void process()
     debug("https://www.waitingforfriday.com\r\n");
     debug("GPLv3 Open-Source\r\n\r\n");
 
+    // Initialise the I2C locations
+    i2c_initialiseRam();
+
     // Initialise DRV8825 driver
     drv8825_initialise();
     drv8825_setStepMode(DRV8825_EIGHTH_STEP);
@@ -62,22 +67,24 @@ void process()
     // Show ready state
     debug("Beeb-Bot MCU Ready\r\n");
     
-    drv8825_setSpeed(DRV8825_LEFT, 16000);
-    drv8825_setSpeed(DRV8825_RIGHT, 16000);
+    drv8825_setSpeed(DRV8825_LEFT, 6000);
+    drv8825_setSpeed(DRV8825_RIGHT, 6000);
     while (1)
     {
-        drv8825_setDirection(DRV8825_RIGHT, DRV8825_FORWARD);
-        drv8825_setDirection(DRV8825_LEFT, DRV8825_FORWARD);
-        drv8825_move(DRV8825_RIGHT, 1600 * 16); // 4 revolutions
-        drv8825_move(DRV8825_LEFT, 1600 * 16); // 4 revolutions
-        while((drv8825_isMotorMoving(DRV8825_RIGHT) > 0) && (drv8825_isMotorMoving(DRV8825_LEFT) > 0)); // Wait for completion
-        HAL_Delay(1000);
+        // drv8825_setDirection(DRV8825_RIGHT, DRV8825_FORWARD);
+        // drv8825_setDirection(DRV8825_LEFT, DRV8825_FORWARD);
+        // drv8825_move(DRV8825_RIGHT, 1600 * 4); // 4 revolutions
+        // drv8825_move(DRV8825_LEFT, 1600 * 4); // 4 revolutions
+        // while((drv8825_isMotorMoving(DRV8825_RIGHT) > 0) && (drv8825_isMotorMoving(DRV8825_LEFT) > 0)); // Wait for completion
+        // HAL_Delay(3000);
 
-        drv8825_setDirection(DRV8825_RIGHT, DRV8825_REVERSE);
-        drv8825_setDirection(DRV8825_LEFT, DRV8825_REVERSE);
-        drv8825_move(DRV8825_RIGHT, 1600 * 16); // 4 revolutions
-        drv8825_move(DRV8825_LEFT, 1600 * 16); // 4 revolutions
-        while((drv8825_isMotorMoving(DRV8825_RIGHT) > 0) && (drv8825_isMotorMoving(DRV8825_LEFT) > 0)); // Wait for completion
-        HAL_Delay(1000);
+        // drv8825_setDirection(DRV8825_RIGHT, DRV8825_REVERSE);
+        // drv8825_setDirection(DRV8825_LEFT, DRV8825_REVERSE);
+        // drv8825_move(DRV8825_RIGHT, 1600 * 4); // 4 revolutions
+        // drv8825_move(DRV8825_LEFT, 1600 * 4); // 4 revolutions
+        // while((drv8825_isMotorMoving(DRV8825_RIGHT) > 0) && (drv8825_isMotorMoving(DRV8825_LEFT) > 0)); // Wait for completion
+        // HAL_Delay(3000);
+
+        if (getTest() == 1) debug("TEST is ONE!");
     }
 }

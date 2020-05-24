@@ -171,11 +171,16 @@ void drv8825_processMotor(uint16_t motor)
             TIM2->PSC = 180;
             TIM2->ARR = 16000;
         }
+
+        // Disable drivers if nothing is happening
+        if (_stepsRemaining[DRV8825_LEFT] == 0 && _stepsRemaining[DRV8825_RIGHT] == 0)
+            HAL_GPIO_WritePin(Step_EN_GPIO_Port, Step_EN_Pin, GPIO_PIN_SET);
     }
 }
 
 void drv8825_initialise()
 {
+    debug("Initalising DRV8825 boards...\r\n");
     drv8825_setStepMode(DRV8825_EIGHTH_STEP);
     drv8825_setDirection(DRV8825_LEFT, DRV8825_FORWARD);
     drv8825_setDirection(DRV8825_RIGHT, DRV8825_FORWARD);
@@ -203,6 +208,11 @@ void drv8825_initialise()
     // Enable the peripheral IRQs
     HAL_NVIC_EnableIRQ(TIM2_IRQn);
     HAL_NVIC_EnableIRQ(TIM3_IRQn);
+
+    // Disable the 8825s (set EN to 0)
+    // Note: The drivers are disabled when the motors are not in use.  This disables
+    // holding torque, but saves lots of power.
+    HAL_GPIO_WritePin(Step_EN_GPIO_Port, Step_EN_Pin, GPIO_PIN_SET);
 }
 
 void drv8825_setDirection(uint16_t motor, uint16_t direction)
@@ -271,6 +281,9 @@ void drv8825_setStepMode(uint16_t stepMode)
 // Move a motor the specified number of steps
 void drv8825_move(uint16_t motor, uint32_t steps)
 {
+    // Enable the motors
+    HAL_GPIO_WritePin(Step_EN_GPIO_Port, Step_EN_Pin, GPIO_PIN_RESET);
+
     _stepsRemaining[motor] += steps;
     _curveCounter[motor] = 0;
     _sps[motor] = DRV8825_MIN_SPS;
