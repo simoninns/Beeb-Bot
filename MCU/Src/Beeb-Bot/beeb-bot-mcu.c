@@ -84,7 +84,5 @@ void process()
         // drv8825_move(DRV8825_LEFT, 1600 * 4); // 4 revolutions
         // while((drv8825_isMotorMoving(DRV8825_RIGHT) > 0) && (drv8825_isMotorMoving(DRV8825_LEFT) > 0)); // Wait for completion
         // HAL_Delay(3000);
-
-        if (getTest() == 1) debug("TEST is ONE!");
     }
 }

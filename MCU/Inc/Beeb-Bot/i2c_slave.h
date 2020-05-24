@@ -27,7 +27,6 @@
 #include "stm32f1xx_hal.h"
 
 // Function prototypes
-uint8_t getTest();
 void i2c_initialiseRam();
 
 // Callback prototypes
