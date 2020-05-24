@@ -78,54 +78,25 @@ F 3 "" H 6450 5100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 NoConn ~ 4750 4550
-$Comp
-L Connector_Generic:Conn_01x06 J?
-U 1 1 5EC6A0E6
-P 8100 3950
-F 0 "J?" H 8180 3942 50  0000 L CNN
-F 1 "Serial TTL" H 8180 3851 50  0000 L CNN
-F 2 "" H 8100 3950 50  0001 C CNN
-F 3 "~" H 8100 3950 50  0001 C CNN
-	1    8100 3950
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
-	7900 3750 7800 3750
+	6300 4050 6750 4050
 Wire Wire Line
-	7800 3750 7800 4400
-NoConn ~ 7900 3850
-NoConn ~ 7900 3950
-NoConn ~ 7900 4250
-Wire Wire Line
-	6300 4050 7900 4050
-Wire Wire Line
-	6300 4150 7900 4150
-$Comp
-L power:GND #PWR?
-U 1 1 5EC6FFDC
-P 7800 4400
-F 0 "#PWR?" H 7800 4150 50  0001 C CNN
-F 1 "GND" H 7805 4227 50  0000 C CNN
-F 2 "" H 7800 4400 50  0001 C CNN
-F 3 "" H 7800 4400 50  0001 C CNN
-	1    7800 4400
-	1    0    0    -1  
-$EndComp
+	6300 4150 6750 4150
 NoConn ~ 6300 4650
 NoConn ~ 6300 3150
-Text GLabel 4550 3750 0    50   Input ~ 0
+Text GLabel 4550 3750 0    50   Output ~ 0
 L_STEP
-Text GLabel 4550 3850 0    50   Input ~ 0
+Text GLabel 4550 3850 0    50   Output ~ 0
 L_DIR
-Text GLabel 6750 3750 2    50   Input ~ 0
+Text GLabel 6750 3750 2    50   Output ~ 0
 R_STEP
-Text GLabel 6750 3850 2    50   Input ~ 0
+Text GLabel 6750 3850 2    50   Output ~ 0
 R_DIR
-Text GLabel 4550 3050 0    50   Input ~ 0
+Text GLabel 4550 3050 0    50   Output ~ 0
 STEP_M0
-Text GLabel 4550 2950 0    50   Input ~ 0
+Text GLabel 4550 2950 0    50   Output ~ 0
 STEP_M1
-Text GLabel 4550 2850 0    50   Input ~ 0
+Text GLabel 4550 2850 0    50   Output ~ 0
 STEP_M2
 Wire Wire Line
 	4550 3050 4750 3050
@@ -229,5 +200,25 @@ S 10200 2850 800  700
 U 5ECED89D
 F0 "Power Supply" 50
 F1 "power_supply.sch" 50
+F2 "Battery_Sense" O L 10200 2950 50 
 $EndSheet
+Text GLabel 9950 2950 0    50   Input ~ 0
+ADC0
+Wire Wire Line
+	9950 2950 10200 2950
+Text GLabel 6750 4050 2    50   Input ~ 0
+RxD_Master
+Text GLabel 6750 4150 2    50   Output ~ 0
+TxD_Master
+Text GLabel 9950 2050 0    50   Input ~ 0
+RxD_Master
+Text GLabel 9950 2150 0    50   Output ~ 0
+TxD_Master
+Wire Wire Line
+	9950 2050 10200 2050
+Wire Wire Line
+	10200 2150 9950 2150
+NoConn ~ 6300 4750
+NoConn ~ 4750 3550
+NoConn ~ 4750 3650
 $EndSCHEMATC
