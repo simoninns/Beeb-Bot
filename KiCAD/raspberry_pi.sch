@@ -136,6 +136,9 @@ NoConn ~ 5200 4050
 NoConn ~ 5200 3950
 NoConn ~ 5200 3850
 NoConn ~ 5200 3650
-NoConn ~ 5200 3550
 NoConn ~ 5200 3450
+Text HLabel 4950 3550 0    50   Input ~ 0
+Interrupt
+Wire Wire Line
+	4950 3550 5200 3550
 $EndSCHEMATC
