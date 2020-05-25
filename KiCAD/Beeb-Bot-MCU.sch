@@ -83,13 +83,13 @@ Wire Wire Line
 Wire Wire Line
 	5600 4300 6050 4300
 NoConn ~ 5600 4800
-Text GLabel 3850 3900 0    50   Output ~ 0
+Text GLabel 3850 4500 0    50   Output ~ 0
 L_Step
-Text GLabel 3850 4000 0    50   Output ~ 0
+Text GLabel 3850 4600 0    50   Output ~ 0
 L_Dir
-Text GLabel 6050 3900 2    50   Output ~ 0
+Text GLabel 6050 3500 2    50   Output ~ 0
 R_Step
-Text GLabel 6050 4000 2    50   Output ~ 0
+Text GLabel 6050 3400 2    50   Output ~ 0
 R_Dir
 Text GLabel 3850 3200 0    50   Output ~ 0
 Step_M0
@@ -111,14 +111,6 @@ Wire Wire Line
 	3850 3100 4050 3100
 Wire Wire Line
 	3850 3000 4050 3000
-Wire Wire Line
-	5600 3900 6050 3900
-Wire Wire Line
-	5600 4000 6050 4000
-Wire Wire Line
-	3850 3900 4050 3900
-Wire Wire Line
-	3850 4000 4050 4000
 $Sheet
 S 10200 750  800  950 
 U 5ECA12E7
@@ -168,26 +160,11 @@ F0 "Raspberry_Pi" 50
 F1 "raspberry_pi.sch" 50
 F2 "Serial_TxD" O L 10200 2450 50 
 F3 "Serial_RxD" I L 10200 2550 50 
-F4 "I2C_SDA" B L 10200 2700 50 
-F5 "I2C_SCL" O L 10200 2800 50 
-F6 "Interrupt" I L 10200 2950 50 
+F4 "Interrupt" I L 10200 2950 50 
+F5 "MISO" I L 10200 2650 50 
+F6 "MOSI" I L 10200 2750 50 
+F7 "SCLK" I L 10200 2850 50 
 $EndSheet
-Text GLabel 3850 4300 0    50   Input ~ 0
-SCL1
-Text GLabel 3850 4400 0    50   BiDi ~ 0
-SDA1
-Wire Wire Line
-	3850 4300 4050 4300
-Wire Wire Line
-	3850 4400 4050 4400
-Text GLabel 9950 2800 0    50   Input ~ 0
-SCL1
-Text GLabel 9950 2700 0    50   BiDi ~ 0
-SDA1
-Wire Wire Line
-	9950 2700 10200 2700
-Wire Wire Line
-	9950 2800 10200 2800
 $Sheet
 S 10200 3400 800  700 
 U 5ECED89D
@@ -226,153 +203,114 @@ Text GLabel 9950 2950 0    50   Input ~ 0
 Interrupt0
 Wire Wire Line
 	9950 2950 10200 2950
-$Comp
-L power:+3V3 #PWR?
-U 1 1 5ED1B9C2
-P 5850 2100
-F 0 "#PWR?" H 5850 1950 50  0001 C CNN
-F 1 "+3V3" H 5865 2273 50  0000 C CNN
-F 2 "" H 5850 2100 50  0001 C CNN
-F 3 "" H 5850 2100 50  0001 C CNN
-	1    5850 2100
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 5ED1BFC4
-P 6450 2400
-F 0 "#PWR?" H 6450 2150 50  0001 C CNN
-F 1 "GND" H 6455 2227 50  0000 C CNN
-F 2 "" H 6450 2400 50  0001 C CNN
-F 3 "" H 6450 2400 50  0001 C CNN
-	1    6450 2400
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5850 2100 5850 2400
-Wire Wire Line
-	5850 2400 6350 2400
-Wire Wire Line
-	6350 2400 6350 2250
-Wire Wire Line
-	6450 2250 6450 2400
-Wire Wire Line
-	6550 2250 6550 3400
-Wire Wire Line
-	6550 3400 5600 3400
-Wire Wire Line
-	6650 2250 6650 3500
-Wire Wire Line
-	6650 3500 5600 3500
-Wire Wire Line
-	6750 2250 6750 3600
-Wire Wire Line
-	6750 3600 5600 3600
-Text Notes 6650 1950 1    50   ~ 0
-I2C2_SCL
-Text Notes 6550 1950 1    50   ~ 0
-I2C2_SDA
-Text Notes 6750 1950 1    50   ~ 0
-Interrupt1
 Text GLabel 6050 3800 2    50   Output ~ 0
 Interrupt0
-Wire Wire Line
-	5600 4100 6050 4100
 $Comp
 L Connector_Generic:Conn_01x01 J?
 U 1 1 5ED22968
-P 7250 3300
-F 0 "J?" H 7330 3342 50  0000 L CNN
-F 1 "NRST" H 7330 3251 50  0000 L CNN
-F 2 "" H 7250 3300 50  0001 C CNN
-F 3 "~" H 7250 3300 50  0001 C CNN
-	1    7250 3300
+P 6850 3300
+F 0 "J?" H 6930 3342 50  0000 L CNN
+F 1 "NRST" H 6930 3251 50  0000 L CNN
+F 2 "" H 6850 3300 50  0001 C CNN
+F 3 "~" H 6850 3300 50  0001 C CNN
+	1    6850 3300
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5600 3300 7050 3300
-$Comp
-L Connector_Generic:Conn_01x06 J?
-U 1 1 5ED249F1
-P 6450 2050
-F 0 "J?" V 6414 1662 50  0000 R CNN
-F 1 "Exp_Header0" V 6323 1662 50  0000 R CNN
-F 2 "" H 6450 2050 50  0001 C CNN
-F 3 "~" H 6450 2050 50  0001 C CNN
-	1    6450 2050
-	0    -1   -1   0   
-$EndComp
-$Comp
-L power:+5V #PWR?
-U 1 1 5ED2D388
-P 6100 2100
-F 0 "#PWR?" H 6100 1950 50  0001 C CNN
-F 1 "+5V" H 6115 2273 50  0000 C CNN
-F 2 "" H 6100 2100 50  0001 C CNN
-F 3 "" H 6100 2100 50  0001 C CNN
-	1    6100 2100
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6100 2100 6100 2300
-Wire Wire Line
-	6100 2300 6250 2300
-Wire Wire Line
-	6250 2300 6250 2250
+	5600 3300 6650 3300
 $Comp
 L Connector_Generic:Conn_01x02 J?
 U 1 1 5ED30269
-P 7800 4600
-F 0 "J?" H 7880 4592 50  0000 L CNN
-F 1 "Bumper_L" H 7880 4501 50  0000 L CNN
-F 2 "" H 7800 4600 50  0001 C CNN
-F 3 "~" H 7800 4600 50  0001 C CNN
-	1    7800 4600
+P 6900 4600
+F 0 "J?" H 6980 4592 50  0000 L CNN
+F 1 "Bumper_L" H 6980 4501 50  0000 L CNN
+F 2 "" H 6900 4600 50  0001 C CNN
+F 3 "~" H 6900 4600 50  0001 C CNN
+	1    6900 4600
 	1    0    0    -1  
 $EndComp
 $Comp
 L Connector_Generic:Conn_01x02 J?
 U 1 1 5ED3065E
-P 7800 4900
-F 0 "J?" H 7880 4892 50  0000 L CNN
-F 1 "Bumper_R" H 7880 4801 50  0000 L CNN
-F 2 "" H 7800 4900 50  0001 C CNN
-F 3 "~" H 7800 4900 50  0001 C CNN
-	1    7800 4900
+P 6900 4900
+F 0 "J?" H 6980 4892 50  0000 L CNN
+F 1 "Bumper_R" H 6980 4801 50  0000 L CNN
+F 2 "" H 6900 4900 50  0001 C CNN
+F 3 "~" H 6900 4900 50  0001 C CNN
+	1    6900 4900
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5600 4600 7600 4600
+	5600 4600 6700 4600
 Wire Wire Line
-	7600 4900 6500 4900
+	6700 4900 6500 4900
 Wire Wire Line
 	6500 4900 6500 4700
 Wire Wire Line
 	5600 4700 6500 4700
 Wire Wire Line
-	7600 4700 7500 4700
+	6700 4700 6600 4700
 Wire Wire Line
-	7500 4700 7500 5000
+	6600 4700 6600 5000
 Wire Wire Line
-	7600 5000 7500 5000
-Connection ~ 7500 5000
+	6700 5000 6600 5000
+Connection ~ 6600 5000
 Wire Wire Line
-	7500 5000 7500 5200
+	6600 5000 6600 5200
 $Comp
 L power:GND #PWR?
 U 1 1 5ED362CC
-P 7500 5200
-F 0 "#PWR?" H 7500 4950 50  0001 C CNN
-F 1 "GND" H 7505 5027 50  0000 C CNN
-F 2 "" H 7500 5200 50  0001 C CNN
-F 3 "" H 7500 5200 50  0001 C CNN
-	1    7500 5200
+P 6600 5200
+F 0 "#PWR?" H 6600 4950 50  0001 C CNN
+F 1 "GND" H 6605 5027 50  0000 C CNN
+F 2 "" H 6600 5200 50  0001 C CNN
+F 3 "" H 6600 5200 50  0001 C CNN
+	1    6600 5200
 	1    0    0    -1  
 $EndComp
-Text GLabel 6050 4100 2    50   Input ~ 0
-ADC4
 Text Notes 9600 6050 0    50   ~ 0
 Notes:\nLDR\nBarcode\nPen U/D\nTilt\n+2 additional digital channels
 Wire Wire Line
 	5600 3800 6050 3800
+Wire Wire Line
+	5600 3500 6050 3500
+Wire Wire Line
+	6050 3400 5600 3400
+Wire Wire Line
+	3850 4500 4050 4500
+Wire Wire Line
+	4050 4600 3850 4600
+Text GLabel 3850 4000 0    50   Input ~ 0
+SPI1_SCK
+Text GLabel 3850 4100 0    50   Input ~ 0
+SPI1_MISO
+Text GLabel 3850 4200 0    50   Input ~ 0
+SPI1_MOSI
+Wire Wire Line
+	3850 4000 4050 4000
+Wire Wire Line
+	4050 4100 3850 4100
+Wire Wire Line
+	3850 4200 4050 4200
+NoConn ~ 4050 4300
+NoConn ~ 4050 4400
+NoConn ~ 4050 3900
+NoConn ~ 4050 3600
+NoConn ~ 5600 3700
+NoConn ~ 5600 3600
+NoConn ~ 5600 4100
+NoConn ~ 5600 4000
+NoConn ~ 5600 3900
+Text GLabel 9950 2850 0    50   Input ~ 0
+SPI1_SCK
+Text GLabel 9950 2650 0    50   Input ~ 0
+SPI1_MISO
+Text GLabel 9950 2750 0    50   Input ~ 0
+SPI1_MOSI
+Wire Wire Line
+	9950 2650 10200 2650
+Wire Wire Line
+	10200 2750 9950 2750
+Wire Wire Line
+	9950 2850 10200 2850
 $EndSCHEMATC

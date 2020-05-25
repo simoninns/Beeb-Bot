@@ -25,7 +25,6 @@
 #include "Beeb-Bot/debug.h"
 #include "Beeb-Bot/drv8825.h"
 #include "Beeb-Bot/led.h"
-#include "Beeb-Bot/i2c_slave.h"
 
 #include "gpio.h"
 #include "tim.h"
@@ -53,9 +52,6 @@ void process()
     debug("\r\n\r\nBeeb-Bot MCU - (c)2020 Simon Inns\r\n");
     debug("https://www.waitingforfriday.com\r\n");
     debug("GPLv3 Open-Source\r\n\r\n");
-
-    // Initialise the I2C locations
-    i2c_initialiseRam();
 
     // Initialise DRV8825 driver
     drv8825_initialise();

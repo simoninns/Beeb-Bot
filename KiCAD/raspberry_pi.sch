@@ -106,14 +106,6 @@ Wire Wire Line
 	4950 3150 5200 3150
 Wire Wire Line
 	4950 3250 5200 3250
-Text HLabel 7050 3450 2    50   BiDi ~ 0
-I2C_SDA
-Text HLabel 7050 3550 2    50   Output ~ 0
-I2C_SCL
-Wire Wire Line
-	6800 3450 7050 3450
-Wire Wire Line
-	6800 3550 7050 3550
 NoConn ~ 6800 3150
 NoConn ~ 6800 3250
 NoConn ~ 6800 3750
@@ -121,9 +113,6 @@ NoConn ~ 6800 3850
 NoConn ~ 6800 3950
 NoConn ~ 6800 4150
 NoConn ~ 6800 4250
-NoConn ~ 6800 4350
-NoConn ~ 6800 4450
-NoConn ~ 6800 4550
 NoConn ~ 6800 4750
 NoConn ~ 6800 4850
 NoConn ~ 5200 4750
@@ -132,13 +121,27 @@ NoConn ~ 5200 4550
 NoConn ~ 5200 4450
 NoConn ~ 5200 4350
 NoConn ~ 5200 4250
-NoConn ~ 5200 4050
-NoConn ~ 5200 3950
-NoConn ~ 5200 3850
 NoConn ~ 5200 3650
 NoConn ~ 5200 3450
 Text HLabel 4950 3550 0    50   Input ~ 0
 Interrupt
 Wire Wire Line
 	4950 3550 5200 3550
+Text HLabel 7000 4350 2    50   Input ~ 0
+MISO
+Text HLabel 7000 4450 2    50   Input ~ 0
+MOSI
+Text HLabel 7000 4550 2    50   Input ~ 0
+SCLK
+NoConn ~ 6800 3550
+NoConn ~ 6800 3450
+NoConn ~ 5200 4050
+NoConn ~ 5200 3950
+NoConn ~ 5200 3850
+Wire Wire Line
+	6800 4350 7000 4350
+Wire Wire Line
+	7000 4450 6800 4450
+Wire Wire Line
+	6800 4550 7000 4550
 $EndSCHEMATC

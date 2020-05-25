@@ -1,5 +1,5 @@
 /************************************************************************
-	i2c_slave.h
+	battery.c
     
 	Beeb-Bot MCU
     Copyright (C) 2020 Simon Inns
@@ -21,19 +21,10 @@
     
 ************************************************************************/
 
-#ifndef __I2C_SLAVE_H
-#define __I2C_SLAVE_H
+#include "Beeb-Bot/battery.h"
 
-#include "stm32f1xx_hal.h"
-
-// Function prototypes
-void i2c_initialiseRam();
-
-// Callback prototypes
-void HAL_I2C_ListenCpltCallback(I2C_HandleTypeDef *hi2c);
-void HAL_I2C_AddrCallback(I2C_HandleTypeDef *hi2c, uint8_t TransferDirection, uint16_t AddrMatchCode);
-void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c);
-void HAL_I2C_SlaveTxCpltCallback(I2C_HandleTypeDef *hi2c);
-void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c);
-
-#endif
+// Returns the current battery level in mVolts
+uint16_t battery_getVoltage()
+{
+    return 0;
+}
