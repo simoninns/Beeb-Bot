@@ -112,7 +112,6 @@ NoConn ~ 6800 3750
 NoConn ~ 6800 3850
 NoConn ~ 6800 3950
 NoConn ~ 6800 4150
-NoConn ~ 6800 4250
 NoConn ~ 6800 4750
 NoConn ~ 6800 4850
 NoConn ~ 5200 4750
@@ -144,4 +143,8 @@ Wire Wire Line
 	7000 4450 6800 4450
 Wire Wire Line
 	6800 4550 7000 4550
+Text HLabel 7000 4250 2    50   Input ~ 0
+~CE0
+Wire Wire Line
+	7000 4250 6800 4250
 $EndSCHEMATC

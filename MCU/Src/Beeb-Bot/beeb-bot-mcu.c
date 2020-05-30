@@ -25,15 +25,12 @@
 #include "Beeb-Bot/debug.h"
 #include "Beeb-Bot/drv8825.h"
 #include "Beeb-Bot/led.h"
+#include "Beeb-Bot/spi_slave.h"
 
 #include "gpio.h"
 #include "tim.h"
 
-// Beeb-Bot MCU initialisation
-void initialise()
-{
-    // Note: No USART available here for debug
-}
+// Top level HAL call back handlers -----------------------------------------------------------------------------------
 
 // Timer period elapsed call-back handler
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htimx)
@@ -42,6 +39,25 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htimx)
     if (htimx->Instance == TIM2) drv8825_leftMotorCallBack();
     if (htimx->Instance == TIM3) drv8825_rightMotorCallBack();
     if (htimx->Instance == TIM4) led_timerCallBack();
+}
+
+// SPI call-back handlers
+void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspix)
+{
+    if (hspix->Instance == SPI1) spi_receiveCompleteCallback();
+}
+
+void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspix)
+{
+    if (hspix->Instance == SPI1) spi_transmitCompleteCallback();
+}
+
+// Functions ----------------------------------------------------------------------------------------------------------
+
+// Beeb-Bot MCU initialisation
+void initialise()
+{
+    // Note: No USART available here for debug
 }
 
 // Main Beeb-Bot MCU main process
@@ -53,32 +69,26 @@ void process()
     debug("https://www.waitingforfriday.com\r\n");
     debug("GPLv3 Open-Source\r\n\r\n");
 
+    // Initialise the SPI slave interface
+    debug("Initalising SPI slave interface...\r\n");
+    spi_initialise();
+
     // Initialise DRV8825 driver
+    debug("Initalising DRV8825 driver...\r\n");
     drv8825_initialise();
     drv8825_setStepMode(DRV8825_EIGHTH_STEP);
+    drv8825_setSpeed(DRV8825_LEFT, 6000);
+    drv8825_setSpeed(DRV8825_RIGHT, 6000);
 
     // Turn on the User LED
+    debug("Initalising LED driver...\r\n");
     led_turnOn();
 
     // Show ready state
-    debug("Beeb-Bot MCU Ready\r\n");
+    debug("Beeb-Bot MCU Ready\r\n\r\n");
     
-    drv8825_setSpeed(DRV8825_LEFT, 6000);
-    drv8825_setSpeed(DRV8825_RIGHT, 6000);
     while (1)
     {
-        // drv8825_setDirection(DRV8825_RIGHT, DRV8825_FORWARD);
-        // drv8825_setDirection(DRV8825_LEFT, DRV8825_FORWARD);
-        // drv8825_move(DRV8825_RIGHT, 1600 * 4); // 4 revolutions
-        // drv8825_move(DRV8825_LEFT, 1600 * 4); // 4 revolutions
-        // while((drv8825_isMotorMoving(DRV8825_RIGHT) > 0) && (drv8825_isMotorMoving(DRV8825_LEFT) > 0)); // Wait for completion
-        // HAL_Delay(3000);
-
-        // drv8825_setDirection(DRV8825_RIGHT, DRV8825_REVERSE);
-        // drv8825_setDirection(DRV8825_LEFT, DRV8825_REVERSE);
-        // drv8825_move(DRV8825_RIGHT, 1600 * 4); // 4 revolutions
-        // drv8825_move(DRV8825_LEFT, 1600 * 4); // 4 revolutions
-        // while((drv8825_isMotorMoving(DRV8825_RIGHT) > 0) && (drv8825_isMotorMoving(DRV8825_LEFT) > 0)); // Wait for completion
-        // HAL_Delay(3000);
+        // Nothing to do here...
     }
 }

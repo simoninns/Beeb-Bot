@@ -154,28 +154,29 @@ Wire Wire Line
 Wire Wire Line
 	9950 1500 10200 1500
 $Sheet
-S 10200 2350 800  700 
+S 10200 2350 800  800 
 U 5ECD6582
 F0 "Raspberry_Pi" 50
 F1 "raspberry_pi.sch" 50
 F2 "Serial_TxD" O L 10200 2450 50 
 F3 "Serial_RxD" I L 10200 2550 50 
-F4 "Interrupt" I L 10200 2950 50 
+F4 "Interrupt" I L 10200 3050 50 
 F5 "MISO" I L 10200 2650 50 
 F6 "MOSI" I L 10200 2750 50 
 F7 "SCLK" I L 10200 2850 50 
+F8 "~CE0" I L 10200 2950 50 
 $EndSheet
 $Sheet
-S 10200 3400 800  700 
+S 10200 3750 800  700 
 U 5ECED89D
 F0 "Power Supply" 50
 F1 "power_supply.sch" 50
-F2 "Battery_Sense" O L 10200 3500 50 
+F2 "Battery_Sense" O L 10200 3850 50 
 $EndSheet
-Text GLabel 9950 3500 0    50   Input ~ 0
+Text GLabel 9950 3850 0    50   Input ~ 0
 ADC1
 Wire Wire Line
-	9950 3500 10200 3500
+	9950 3850 10200 3850
 Text GLabel 6050 4200 2    50   Input ~ 0
 RxD_Master
 Text GLabel 6050 4300 2    50   Output ~ 0
@@ -199,10 +200,8 @@ Text GLabel 9950 1600 0    50   Input ~ 0
 Step_EN
 Wire Wire Line
 	9950 1600 10200 1600
-Text GLabel 9950 2950 0    50   Input ~ 0
+Text GLabel 9950 3050 0    50   Input ~ 0
 Interrupt0
-Wire Wire Line
-	9950 2950 10200 2950
 Text GLabel 6050 3800 2    50   Output ~ 0
 Interrupt0
 $Comp
@@ -294,7 +293,6 @@ Wire Wire Line
 	3850 4200 4050 4200
 NoConn ~ 4050 4300
 NoConn ~ 4050 4400
-NoConn ~ 4050 3900
 NoConn ~ 4050 3600
 NoConn ~ 5600 3700
 NoConn ~ 5600 3600
@@ -313,4 +311,14 @@ Wire Wire Line
 	10200 2750 9950 2750
 Wire Wire Line
 	9950 2850 10200 2850
+Text GLabel 3850 3900 0    50   Input ~ 0
+SPI1_NSS
+Wire Wire Line
+	3850 3900 4050 3900
+Text GLabel 9950 2950 0    50   Input ~ 0
+SPI1_NSS
+Wire Wire Line
+	9950 2950 10200 2950
+Wire Wire Line
+	10200 3050 9950 3050
 $EndSCHEMATC

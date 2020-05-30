@@ -180,7 +180,6 @@ void drv8825_processMotor(uint16_t motor)
 
 void drv8825_initialise()
 {
-    debug("Initalising DRV8825 boards...\r\n");
     drv8825_setStepMode(DRV8825_EIGHTH_STEP);
     drv8825_setDirection(DRV8825_LEFT, DRV8825_FORWARD);
     drv8825_setDirection(DRV8825_RIGHT, DRV8825_FORWARD);
@@ -192,6 +191,8 @@ void drv8825_initialise()
     _sps[DRV8825_RIGHT] = DRV8825_MIN_SPS;
     _curveCounter[DRV8825_LEFT] = 0;
     _curveCounter[DRV8825_RIGHT] = 0;
+    _motorDirection[DRV8825_LEFT] = DRV8825_FORWARD;
+    _motorDirection[DRV8825_RIGHT] = DRV8825_FORWARD;
 
     // Configure the output pulse timers
     drv8825_leftTimerSetup();
@@ -213,29 +214,6 @@ void drv8825_initialise()
     // Note: The drivers are disabled when the motors are not in use.  This disables
     // holding torque, but saves lots of power.
     HAL_GPIO_WritePin(Step_EN_GPIO_Port, Step_EN_Pin, GPIO_PIN_SET);
-}
-
-void drv8825_setDirection(uint16_t motor, uint16_t direction)
-{
-    if (motor == DRV8825_LEFT) {
-        if (direction == DRV8825_FORWARD) HAL_GPIO_WritePin(L_Dir_GPIO_Port, L_Dir_Pin, GPIO_PIN_SET);
-        else HAL_GPIO_WritePin(L_Dir_GPIO_Port, L_Dir_Pin, GPIO_PIN_RESET);
-    } else {
-        if (direction == DRV8825_FORWARD) HAL_GPIO_WritePin(R_Dir_GPIO_Port, R_Dir_Pin, GPIO_PIN_RESET);
-        else HAL_GPIO_WritePin(R_Dir_GPIO_Port, R_Dir_Pin, GPIO_PIN_SET);
-    }
-}
-
-void drv8825_setSpeed(uint16_t motor, uint16_t motorSps)
-{
-    // Range check against maximum SPS
-    if (motorSps > DRV8825_MAX_SPS) motorSps = DRV8825_MAX_SPS;
-
-    _targetSps[motor] = motorSps;
-    _curveCounter[motor] = 0;
-
-    // Set the initial SPS to minimum
-    _sps[motor] = DRV8825_MIN_SPS;
 }
 
 void drv8825_setStepMode(uint16_t stepMode)
@@ -278,8 +256,53 @@ void drv8825_setStepMode(uint16_t stepMode)
     }
 }
 
+void drv8825_setDirection(uint16_t motor, uint16_t direction)
+{
+    if (motor == DRV8825_LEFT) {
+        if (direction == DRV8825_FORWARD) {
+            HAL_GPIO_WritePin(L_Dir_GPIO_Port, L_Dir_Pin, GPIO_PIN_SET);
+            _motorDirection[DRV8825_LEFT] = DRV8825_FORWARD;
+        } else {
+            HAL_GPIO_WritePin(L_Dir_GPIO_Port, L_Dir_Pin, GPIO_PIN_RESET);
+            _motorDirection[DRV8825_LEFT] = DRV8825_REVERSE;
+        }
+    } else {
+        if (direction == DRV8825_FORWARD) {
+            HAL_GPIO_WritePin(R_Dir_GPIO_Port, R_Dir_Pin, GPIO_PIN_RESET);
+            _motorDirection[DRV8825_RIGHT] = DRV8825_FORWARD;
+        } else {
+            HAL_GPIO_WritePin(R_Dir_GPIO_Port, R_Dir_Pin, GPIO_PIN_SET);
+            _motorDirection[DRV8825_RIGHT] = DRV8825_REVERSE;
+        }
+    }
+}
+
+uint32_t drv8825_getDirection(uint16_t motor)
+{
+    if (motor == DRV8825_LEFT) return _motorDirection[DRV8825_LEFT];
+    return _motorDirection[DRV8825_RIGHT];
+}
+
+void drv8825_setSpeed(uint16_t motor, uint16_t motorSps)
+{
+    // Range check against maximum SPS
+    if (motorSps > DRV8825_MAX_SPS) motorSps = DRV8825_MAX_SPS;
+
+    _targetSps[motor] = motorSps;
+    _curveCounter[motor] = 0;
+
+    // Set the initial SPS to minimum
+    _sps[motor] = DRV8825_MIN_SPS;
+}
+
+uint32_t drv8825_getSpeed(uint16_t motor)
+{
+    if (motor == DRV8825_LEFT) return _targetSps[DRV8825_LEFT];
+    return _targetSps[DRV8825_RIGHT];
+}
+
 // Move a motor the specified number of steps
-void drv8825_move(uint16_t motor, uint32_t steps)
+void drv8825_setSteps(uint16_t motor, uint32_t steps)
 {
     // Enable the motors
     HAL_GPIO_WritePin(Step_EN_GPIO_Port, Step_EN_Pin, GPIO_PIN_RESET);
@@ -289,8 +312,8 @@ void drv8825_move(uint16_t motor, uint32_t steps)
     _sps[motor] = DRV8825_MIN_SPS;
 }
 
-// Check if motor is moving: Returns >0 if motor is active
-uint32_t drv8825_isMotorMoving(uint16_t motor)
+uint32_t drv8825_getSteps(uint16_t motor)
 {
-    return _stepsRemaining[motor];
+    if (motor == DRV8825_LEFT) return _stepsRemaining[DRV8825_LEFT];
+    return _stepsRemaining[DRV8825_RIGHT];
 }

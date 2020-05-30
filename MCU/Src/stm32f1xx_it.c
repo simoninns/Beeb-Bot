@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "Beeb-Bot/led.h"
 #include "Beeb-Bot/drv8825.h"
+#include "Beeb-Bot/spi_slave.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

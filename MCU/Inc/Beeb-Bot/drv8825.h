@@ -26,12 +26,13 @@
 
 #include "stm32f1xx_hal.h"
 
-// Globals for motor handling interrupts
+// Globals for motor handling 
 volatile uint8_t _motorSignal[2];
 volatile uint32_t _sps[2];
 volatile uint32_t _stepsRemaining[2];
 volatile uint32_t _targetSps[2];
 volatile uint32_t _curveCounter[2];
+volatile uint32_t _motorDirection[2];
 
 // Definitions
 #define DRV8825_FULL_STEP           0
@@ -60,10 +61,15 @@ void drv8825_leftMotorCallBack();
 void drv8825_rightMotorCallBack();
 void drv8825_processMotor(uint16_t motor);
 void drv8825_initialise();
-void drv8825_setDirection(uint16_t motor, uint16_t direction);
-void drv8825_setSpeed(uint16_t motor, uint16_t motorSps);
 void drv8825_setStepMode(uint16_t stepMode);
-void drv8825_move(uint16_t motor, uint32_t steps);
-uint32_t drv8825_isMotorMoving(uint16_t motor);
+
+void drv8825_setDirection(uint16_t motor, uint16_t direction);
+uint32_t drv8825_getDirection(uint16_t motor);
+
+void drv8825_setSpeed(uint16_t motor, uint16_t motorSps);
+uint32_t drv8825_getSpeed(uint16_t motor);
+
+void drv8825_setSteps(uint16_t motor, uint32_t steps);
+uint32_t drv8825_getSteps(uint16_t motor);
 
 #endif
