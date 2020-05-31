@@ -50,7 +50,7 @@ uint8_t _spiBuffer[5];
 // Commands are:
 // 0x0x = System commands
 // 0x00 - Get version
-// 0x01 - Get battery level
+// 0x01 - Get battery voltage level
 //
 // 0x1x = Left motor commands
 // 0x10 - Set left motor direction
@@ -73,8 +73,6 @@ uint8_t _spiBuffer[5];
 // SPI command processing
 void processSpiCommand()
 {
-    char debugString[80] = "";
-
     uint8_t inCommand;
     uint32_t inParameter;
 
@@ -88,30 +86,30 @@ void processSpiCommand()
     inParameter += (uint32_t)(_spiBuffer[3] <<  8);
     inParameter += (uint32_t)(_spiBuffer[4]);
 
-    sprintf(debugString, "SPI in: %u %u %u %u %u\r\n", _spiBuffer[0], _spiBuffer[1], _spiBuffer[2], _spiBuffer[3], _spiBuffer[4]);
-    debug(debugString);
-
-    sprintf(debugString, "SPI in: Command %u with parameter %lu received\r\n", inCommand, inParameter);
-    debug(debugString);
-
     switch(inCommand) {
         // System commands 0x0x -------------------------------------------------------------------
-        case 0x00: // Get version
-            outResponse = 0x02; // ok
-            outParameter = 0x03040506;
+        case 0x00: // Get firmware version
+            outResponse = 0;
+            outParameter = 1;
             break;
 
-        case 0x01: // Get battery level
+        case 0x01: // Get battery voltage level (in mV)
             outResponse = 0;
             outParameter = 0;
             break;
 
         // Left motor commands --------------------------------------------------------------------
         case 0x10: // Set left motor direction
-            if (inParameter == 0) drv8825_setDirection(DRV8825_LEFT, DRV8825_FORWARD);
-            else drv8825_setDirection(DRV8825_LEFT, DRV8825_REVERSE);
-            outResponse = 0;
-            outParameter = 0;
+            // Do not allow change of direction if motor is active
+            if (drv8825_getSteps(DRV8825_LEFT) == 0) {
+                if (inParameter == 0) drv8825_setDirection(DRV8825_LEFT, DRV8825_FORWARD);
+                else drv8825_setDirection(DRV8825_LEFT, DRV8825_REVERSE);
+                outResponse = 0;
+                outParameter = 0;
+            } else {
+                outResponse = 1; // Error
+                outParameter = 0;
+            }
             break;
 
         case 0x11: // Get left motor direction
@@ -144,10 +142,16 @@ void processSpiCommand()
 
         // Right motor commands --------------------------------------------------------------------
         case 0x20: // Set right motor direction
-            if (inParameter == 0) drv8825_setDirection(DRV8825_RIGHT, DRV8825_FORWARD);
-            else drv8825_setDirection(DRV8825_RIGHT, DRV8825_REVERSE);
-            outResponse = 0;
-            outParameter = 0;
+            // Do not allow change of direction if motor is active
+            if (drv8825_getSteps(DRV8825_RIGHT) == 0) {
+                if (inParameter == 0) drv8825_setDirection(DRV8825_RIGHT, DRV8825_FORWARD);
+                else drv8825_setDirection(DRV8825_RIGHT, DRV8825_REVERSE);
+                outResponse = 0;
+                outParameter = 0;
+            } else {
+                outResponse = 1; // Error
+                outParameter = 0;
+            }
             break;
 
         case 0x21: // Get right motor direction
@@ -180,8 +184,8 @@ void processSpiCommand()
 
         // Unknown command
         default:
-            outResponse = 0x01;
-            outParameter = 0x02020202;
+            outResponse = 1;
+            outParameter = 0;
     }
 
     // Join the output response and parameter into the out buffer
@@ -190,12 +194,6 @@ void processSpiCommand()
     _spiBuffer[2] = (uint8_t)((outParameter & 0x00FF0000UL) >> 16);
     _spiBuffer[3] = (uint8_t)((outParameter & 0x0000FF00UL) >> 8);
     _spiBuffer[4] = (uint8_t)((outParameter & 0x000000FFUL));
-
-    sprintf(debugString, "SPI out: %u %u %u %u %u\r\n", _spiBuffer[0], _spiBuffer[1], _spiBuffer[2], _spiBuffer[3], _spiBuffer[4]);
-    debug(debugString);
-
-    sprintf(debugString, "SPI out: Response %u with parameter %lu\r\n", outResponse, outParameter);
-    debug(debugString);
 }
 
 // SPI interrupt handlers ---------------------------------------------------------------------------------------------
