@@ -23,42 +23,26 @@
 #************************************************************************
 
 from beebbot import Beebbot
-from beebbot import Beebbot_Motor
-from beebbot import Beebbot_Direction
-
-from time import sleep
 
 # Main
 beebbot = Beebbot()
-print("BeebBot Status: ")
-print("  Firmware version: ", beebbot.firmwareVersion())
-print("  Battery voltage (mV): ", beebbot.batteryVoltage())
 
-print("  Left motor:")
-print("    Direction: ", beebbot.getMotorDirection(Beebbot_Motor.left))
-print("    Speed (SPS): ", beebbot.getMotorSpeed(Beebbot_Motor.left))
-print("    Steps: ", beebbot.getMotorSteps(Beebbot_Motor.left))
+# Show the status of the BeebBot
+beebbot.showStatus()
 
-print("  Right motor:")
-print("    Direction: ", beebbot.getMotorDirection(Beebbot_Motor.right))
-print("    Speed (SPS): ", beebbot.getMotorSpeed(Beebbot_Motor.right))
-print("    Steps: ", beebbot.getMotorSteps(Beebbot_Motor.right))
+# Set speed to 100mm/sec
+beebbot.speed(100)
 
-# Move BeebBot in square
-beebbot.setMotorSpeed(Beebbot_Motor.left, 6000)
-beebbot.setMotorSpeed(Beebbot_Motor.right, 6000)
+# # Move 150mm - forwards
+# beebbot.forwards(150)
+# beebbot.waitForCompletion()
 
-beebbot.setMotorDirection(Beebbot_Motor.left, Beebbot_Direction.forwards)
-beebbot.setMotorDirection(Beebbot_Motor.right, Beebbot_Direction.reverse)
+# # Move 150mm - reverse
+# beebbot.reverse(150)
+# beebbot.waitForCompletion()
 
-beebbot.setMotorSteps(Beebbot_Motor.left, 5000)
-beebbot.setMotorSteps(Beebbot_Motor.right, 5000)
+beebbot.pivotLeft(90)
+beebbot.waitForCompletion()
 
-while ((beebbot.getMotorSteps(Beebbot_Motor.left) != 0) and (beebbot.getMotorSteps(Beebbot_Motor.right) != 0)):
-	sleep(0.2)
-
-beebbot.setMotorDirection(Beebbot_Motor.left, Beebbot_Direction.reverse)
-beebbot.setMotorDirection(Beebbot_Motor.right, Beebbot_Direction.forwards)
-
-beebbot.setMotorSteps(Beebbot_Motor.left, 5000)
-beebbot.setMotorSteps(Beebbot_Motor.right, 5000)
+beebbot.pivotRight(90)
+beebbot.waitForCompletion()
