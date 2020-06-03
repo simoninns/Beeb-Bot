@@ -66,15 +66,16 @@ class Beebbot_command:
 
 # Send a command to BeebBot and collect the response using SPI
 class Beebbot_communicate:
-	def __init__(self, bus, device):
-		self.spi = spidev.SpiDev()
-		self.spi.open(bus, device)
-		self.spi.max_speed_hz = 500000
-		self.spi.mode = 0
+    def __init__(self, bus, device):
+        self.spi = spidev.SpiDev()
+        self.spi.open(bus, device)
+        self.spi.max_speed_hz = 100000
+        self.spi.mode = 0
 
-	def send(self, command):
-		self.spi.writebytes(command.bytes)
-		return Beebbot_response(self.spi.readbytes(5))
+    def send(self, command):
+        self.spi.xfer(command.bytes)
+        dummy = [0x00, 0x00, 0x00, 0x00, 0x00]
+        return Beebbot_response(self.spi.xfer(dummy))
 
 # Send SPI commands to BeebBot
 # Note: This class is tightly coupled with the STM32 communication protocol
@@ -86,7 +87,7 @@ class Beebbot_protocol:
     # System command - Get firmware version (0x00)
     def firmwareVersion(self):
         response = self.robot.send(Beebbot_command(0x00, 0))
-        if response.resultCode != 0:
+        if response.resultCode != 1:
             return False
         else: 
             return response.parameter
@@ -94,7 +95,7 @@ class Beebbot_protocol:
     # System command - Get battery voltage in mV (0x01)
     def batteryVoltage(self):
         response = self.robot.send(Beebbot_command(0x01, 0))
-        if response.resultCode != 0:
+        if response.resultCode != 1:
             return False
         else:
             return response.parameter
@@ -104,21 +105,21 @@ class Beebbot_protocol:
         if motor == Beebbot_Motor.left:
             if direction == Beebbot_Direction.forwards:
                 response = self.robot.send(Beebbot_command(0x10, 0))
-                if response.resultCode != 0: return False
+                if response.resultCode != 1: return False
                 else: return True
             else:
                 response = self.robot.send(Beebbot_command(0x10, 1))
-                if response.resultCode != 0: return False
+                if response.resultCode != 1: return False
                 else: return True
 
         elif motor == Beebbot_Motor.right:
             if direction == Beebbot_Direction.forwards:
                 response = self.robot.send(Beebbot_command(0x20, 0))
-                if response.resultCode != 0: return False
+                if response.resultCode != 1: return False
                 else: return True
             else:
                 response = self.robot.send(Beebbot_command(0x20, 1))
-                if response.resultCode != 0: return False
+                if response.resultCode != 1: return False
                 else: return True
 
         else:
@@ -128,13 +129,13 @@ class Beebbot_protocol:
     def getMotorDirection(self, motor):
         if motor == Beebbot_Motor.left:
             response = self.robot.send(Beebbot_command(0x11, 0))
-            if response.resultCode != 0: return False
+            if response.resultCode != 1: return False
             if response.parameter == 0: return Beebbot_Direction.forwards
             return Beebbot_Direction.reverse
 
         elif motor == Beebbot_Motor.right:
             response = self.robot.send(Beebbot_command(0x21, 0))
-            if response.resultCode != 0: return False
+            if response.resultCode != 1: return False
             if response.parameter == 0: return Beebbot_Direction.forwards
             return Beebbot_Direction.reverse
 
@@ -145,12 +146,12 @@ class Beebbot_protocol:
     def setMotorSpeed(self, motor, speed):
         if motor == Beebbot_Motor.left:
             response = self.robot.send(Beebbot_command(0x12, speed))
-            if response.resultCode != 0: return False
+            if response.resultCode != 1: return False
             else: return True
 
         elif motor == Beebbot_Motor.right:
             response = self.robot.send(Beebbot_command(0x22, speed))
-            if response.resultCode != 0: return False
+            if response.resultCode != 1: return False
             else: return True
 
         else:
@@ -160,12 +161,12 @@ class Beebbot_protocol:
     def getMotorSpeed(self, motor):
         if motor == Beebbot_Motor.left:
             response = self.robot.send(Beebbot_command(0x13, 0))
-            if response.resultCode != 0: return -1
+            if response.resultCode != 1: return -1
             return response.parameter
 
         elif motor == Beebbot_Motor.right:
             response = self.robot.send(Beebbot_command(0x23, 0))
-            if response.resultCode != 0: return -1
+            if response.resultCode != 1: return -1
             return response.parameter
 
         else:
@@ -175,12 +176,12 @@ class Beebbot_protocol:
     def setMotorSteps(self, motor, steps):
         if motor == Beebbot_Motor.left:
             response = self.robot.send(Beebbot_command(0x14, steps))
-            if response.resultCode != 0: return False
+            if response.resultCode != 1: return False
             else: return True
 
         elif motor == Beebbot_Motor.right:
             response = self.robot.send(Beebbot_command(0x24, steps))
-            if response.resultCode != 0: return False
+            if response.resultCode != 1: return False
             else: return True
 
         else:
@@ -190,12 +191,14 @@ class Beebbot_protocol:
     def getMotorSteps(self, motor):
         if motor == Beebbot_Motor.left:
             response = self.robot.send(Beebbot_command(0x15, 0))
-            if response.resultCode != 0: return -1
+            if response.resultCode != 1:
+                return -1
             return response.parameter
 
         elif motor == Beebbot_Motor.right:
             response = self.robot.send(Beebbot_command(0x25, 0))
-            if response.resultCode != 0: return -1
+            if response.resultCode != 1:
+                return -1
             return response.parameter
 
         else:
@@ -243,58 +246,80 @@ class Beebbot:
 
     # Set the speed of both BeebBot motors
     def speed(self, mmPerSecond):
-        # Ensure the robot's motors are stopped
-        if self.isMoving():
+        # Ensure the robot's motors are ready
+        status = self.isMoving()
+        if status == 1:
             print("Warning: Cannot execute speed command - motors active")
-            return
+            return False
+        if status == -1:
+            print("Error: Cannot communicate with BeebBot")
+            return False
 
         revolutions = mmPerSecond / self.wheelCircumference
         stepsPerSecond = int(revolutions * self.stepsPerRevolution)
 
         print("Setting speed to", mmPerSecond, "mm/sec (", stepsPerSecond, "steps/sec)")
-        self.beebbot_protocol.setMotorSpeed(Beebbot_Motor.left, stepsPerSecond)
-        self.beebbot_protocol.setMotorSpeed(Beebbot_Motor.right, stepsPerSecond)
+        if not self.beebbot_protocol.setMotorSpeed(Beebbot_Motor.left, stepsPerSecond): return False
+        if not self.beebbot_protocol.setMotorSpeed(Beebbot_Motor.right, stepsPerSecond): return False
+
+        return True
 
     # Move the BeebBot forwards
     def forwards(self, millimeters):
-        # Ensure the robot's motors are stopped
-        if self.isMoving():
+        # Ensure the robot's motors are ready
+        status = self.isMoving()
+        if status == 1:
             print("Warning: Cannot execute forward command - motors active")
-            return
+            return False
+        if status == -1:
+            print("Error: Cannot communicate with BeebBot")
+            return False
 
         revolutions = millimeters / self.wheelCircumference
         steps = int(revolutions * self.stepsPerRevolution)
 
         print("Moving forwards", millimeters, "mm (", steps, "steps)")
-        self.beebbot_protocol.setMotorDirection(Beebbot_Motor.left, Beebbot_Direction.forwards)
-        self.beebbot_protocol.setMotorDirection(Beebbot_Motor.right, Beebbot_Direction.forwards)
+        if not self.beebbot_protocol.setMotorDirection(Beebbot_Motor.left, Beebbot_Direction.forwards): return False
+        if not self.beebbot_protocol.setMotorDirection(Beebbot_Motor.right, Beebbot_Direction.forwards): return False
 
-        self.beebbot_protocol.setMotorSteps(Beebbot_Motor.left, steps)
-        self.beebbot_protocol.setMotorSteps(Beebbot_Motor.right, steps)
+        if not self.beebbot_protocol.setMotorSteps(Beebbot_Motor.left, steps): return False
+        if not self.beebbot_protocol.setMotorSteps(Beebbot_Motor.right, steps): return False
+
+        return True
 
     # Move the BeebBot backwards
     def reverse(self, millimeters):
-        # Ensure the robot's motors are stopped
-        if self.isMoving():
+        # Ensure the robot's motors are ready
+        status = self.isMoving()
+        if status == 1:
             print("Warning: Cannot execute reverse command - motors active")
-            return
+            return False
+        if status == -1:
+            print("Error: Cannot communicate with BeebBot")
+            return False
 
         revolutions = millimeters / self.wheelCircumference
         steps = int(revolutions * self.stepsPerRevolution)
 
         print("Moving backwards", millimeters, "mm (", steps, "steps)")
-        self.beebbot_protocol.setMotorDirection(Beebbot_Motor.left, Beebbot_Direction.reverse)
-        self.beebbot_protocol.setMotorDirection(Beebbot_Motor.right, Beebbot_Direction.reverse)
+        if not self.beebbot_protocol.setMotorDirection(Beebbot_Motor.left, Beebbot_Direction.reverse): return False
+        if not self.beebbot_protocol.setMotorDirection(Beebbot_Motor.right, Beebbot_Direction.reverse): return False
 
-        self.beebbot_protocol.setMotorSteps(Beebbot_Motor.left, steps)
-        self.beebbot_protocol.setMotorSteps(Beebbot_Motor.right, steps)
+        if not self.beebbot_protocol.setMotorSteps(Beebbot_Motor.left, steps): return False
+        if not self.beebbot_protocol.setMotorSteps(Beebbot_Motor.right, steps): return False
+
+        return True
 
     # Pivot the BeebBot left (rotate around wheel axis)
     def pivotLeft(self, degrees):
-        # Ensure the robot's motors are stopped
-        if self.isMoving():
+        # Ensure the robot's motors are ready
+        status = self.isMoving()
+        if status == 1:
             print("Warning: Cannot execute pivot left command - motors active")
-            return
+            return False
+        if status == -1:
+            print("Error: Cannot communicate with BeebBot")
+            return False
         
         # Calculate the number of mm per 360 degrees
         pivotCircumferenceMM = 2 * 3.1415927 * (self.wheelDistanceMM / 2)
@@ -310,18 +335,24 @@ class Beebbot:
         steps = int(revolutions * self.stepsPerRevolution)
 
         print("Pivoting left", degrees, "degrees (", steps, "steps)")
-        self.beebbot_protocol.setMotorDirection(Beebbot_Motor.left, Beebbot_Direction.forwards)
-        self.beebbot_protocol.setMotorDirection(Beebbot_Motor.right, Beebbot_Direction.reverse)
+        if not self.beebbot_protocol.setMotorDirection(Beebbot_Motor.left, Beebbot_Direction.forwards): return False
+        if not self.beebbot_protocol.setMotorDirection(Beebbot_Motor.right, Beebbot_Direction.reverse): return False
 
-        self.beebbot_protocol.setMotorSteps(Beebbot_Motor.left, steps)
-        self.beebbot_protocol.setMotorSteps(Beebbot_Motor.right, steps)
+        if not self.beebbot_protocol.setMotorSteps(Beebbot_Motor.left, steps): return False
+        if not self.beebbot_protocol.setMotorSteps(Beebbot_Motor.right, steps): return False
+
+        return True
 
     # Pivot the BeebBot right (rotate around wheel axis)
     def pivotRight(self, degrees):
-        # Ensure the robot's motors are stopped
-        if self.isMoving():
+        # Ensure the robot's motors are ready
+        status = self.isMoving()
+        if status == 1:
             print("Warning: Cannot execute pivot right command - motors active")
-            return
+            return False
+        if status == -1:
+            print("Error: Cannot communicate with BeebBot")
+            return False
         
         # Calculate the number of mm per 360 degrees
         pivotCircumferenceMM = 2 * 3.1415927 * (self.wheelDistanceMM / 2)
@@ -337,21 +368,39 @@ class Beebbot:
         steps = int(revolutions * self.stepsPerRevolution)
 
         print("Pivoting right", degrees, "degrees (", steps, "steps)")
-        self.beebbot_protocol.setMotorDirection(Beebbot_Motor.left, Beebbot_Direction.reverse)
-        self.beebbot_protocol.setMotorDirection(Beebbot_Motor.right, Beebbot_Direction.forwards)
+        if not self.beebbot_protocol.setMotorDirection(Beebbot_Motor.left, Beebbot_Direction.reverse): return False
+        if not self.beebbot_protocol.setMotorDirection(Beebbot_Motor.right, Beebbot_Direction.forwards): return False
 
-        self.beebbot_protocol.setMotorSteps(Beebbot_Motor.left, steps)
-        self.beebbot_protocol.setMotorSteps(Beebbot_Motor.right, steps)
+        if not self.beebbot_protocol.setMotorSteps(Beebbot_Motor.left, steps): return False
+        if not self.beebbot_protocol.setMotorSteps(Beebbot_Motor.right, steps): return False
+
+        return True
 
     # Return True if the BeebBot is moving
     def isMoving(self):
-        if ((self.beebbot_protocol.getMotorSteps(Beebbot_Motor.left) == 0) and (self.beebbot_protocol.getMotorSteps(Beebbot_Motor.right) == 0)):
-            return False # BeebBot is not moving
-        return True # BeebBot is moving
+        # Get remaining number of motor steps
+        left = self.beebbot_protocol.getMotorSteps(Beebbot_Motor.left)
+        right = self.beebbot_protocol.getMotorSteps(Beebbot_Motor.right)
+
+        # Both motors stopped?
+        if left == 0 and right == 0:
+            return 0 # BeebBot is not moving
+
+        # Communication error on either motor?
+        if left == -1 or right == -1:
+            return -1 # Error
+        else:
+            return 1 # BeebBot is moving
 
     # Wait for the BeebBot to stop moving
     def waitForCompletion(self):
-        while (self.isMoving()):
-            print("Left:", self.beebbot_protocol.getMotorSteps(Beebbot_Motor.left), " Right:", self.beebbot_protocol.getMotorSteps(Beebbot_Motor.right))
-            sleep(0.5)
-        print("Left: stopped  Right: stopped")
+        while self.isMoving() == 1:
+            pass
+        #print("Left:", self.beebbot_protocol.getMotorSteps(Beebbot_Motor.left), " Right:", self.beebbot_protocol.getMotorSteps(Beebbot_Motor.right))
+        
+        if (self.isMoving() == 0):
+            print("Left: stopped  Right: stopped")
+            return True
+        else:
+            print("waitForCompletion: Communication error")
+            return False

@@ -26,23 +26,23 @@ from beebbot import Beebbot
 
 # Main
 beebbot = Beebbot()
+running = True
 
 # Show the status of the BeebBot
 beebbot.showStatus()
 
 # Set speed to 100mm/sec
-beebbot.speed(100)
+if not beebbot.speed(100):
+    print("Cannot set speed - Communication failure")
+    running = False
 
-# # Move 150mm - forwards
-# beebbot.forwards(150)
-# beebbot.waitForCompletion()
+while running:
+    if not beebbot.pivotLeft(90): running = False
+    if not beebbot.waitForCompletion(): running = False
 
-# # Move 150mm - reverse
-# beebbot.reverse(150)
-# beebbot.waitForCompletion()
+    if not beebbot.pivotRight(90): running = False
+    if not beebbot.waitForCompletion(): running = False
 
-beebbot.pivotLeft(90)
-beebbot.waitForCompletion()
+    if not running: print("Stopping run due to communication failure")
 
-beebbot.pivotRight(90)
-beebbot.waitForCompletion()
+print("Finished")

@@ -28,8 +28,7 @@
 
 // Function prototypes
 void spi_initialise();
-void spi_receiveCompleteCallback();
-void spi_transmitCompleteCallback();
+void spi_transmitReceiveCompleteCallback();
 
 void processSpiCommand();
 

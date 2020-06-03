@@ -42,14 +42,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htimx)
 }
 
 // SPI call-back handlers
-void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspix)
+void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspix)
 {
-    if (hspix->Instance == SPI1) spi_receiveCompleteCallback();
-}
-
-void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspix)
-{
-    if (hspix->Instance == SPI1) spi_transmitCompleteCallback();
+    if (hspix->Instance == SPI1) spi_transmitReceiveCompleteCallback();
 }
 
 // Functions ----------------------------------------------------------------------------------------------------------

@@ -26,7 +26,16 @@
 #include "Beeb-Bot/drv8825.h"
 #include "spi.h"
 
-uint8_t _spiBuffer[5];
+static uint8_t _spiTxBuffer[5];
+static uint8_t _spiRxBuffer[5];
+
+#define SPISTATE_WAITING    0
+#define SPISTATE_SENDING    1
+volatile uint8_t _spiState = SPISTATE_WAITING;
+
+// Define response codes
+#define RESPONSE_OK 1
+#define RESPONSE_ERROR 2
 
 // Note:
 //
@@ -76,25 +85,28 @@ void processSpiCommand()
     uint8_t inCommand;
     uint32_t inParameter;
 
-    uint8_t outResponse = 1;
+    uint8_t outResponse = RESPONSE_ERROR;
     uint32_t outParameter = 0;
 
-    // Split the in buffer into command and parameter
-    inCommand = _spiBuffer[0];
-    inParameter  = (uint32_t)(_spiBuffer[1] << 24);
-    inParameter += (uint32_t)(_spiBuffer[2] << 16);
-    inParameter += (uint32_t)(_spiBuffer[3] <<  8);
-    inParameter += (uint32_t)(_spiBuffer[4]);
+    // Split the Rx buffer into command and parameter
+    inCommand = _spiRxBuffer[0];
+    inParameter  = (uint32_t)(_spiRxBuffer[1] << 24);
+    inParameter += (uint32_t)(_spiRxBuffer[2] << 16);
+    inParameter += (uint32_t)(_spiRxBuffer[3] <<  8);
+    inParameter += (uint32_t)(_spiRxBuffer[4]);
+
+    // Clear the receive buffer
+    for (uint16_t i = 0; i < 5; i++) _spiRxBuffer[i] = 0;
 
     switch(inCommand) {
         // System commands 0x0x -------------------------------------------------------------------
         case 0x00: // Get firmware version
-            outResponse = 0;
+            outResponse = RESPONSE_OK;
             outParameter = 1;
             break;
 
         case 0x01: // Get battery voltage level (in mV)
-            outResponse = 0;
+            outResponse = RESPONSE_OK;
             outParameter = 0;
             break;
 
@@ -104,10 +116,10 @@ void processSpiCommand()
             if (drv8825_getSteps(DRV8825_LEFT) == 0) {
                 if (inParameter == 0) drv8825_setDirection(DRV8825_LEFT, DRV8825_FORWARD);
                 else drv8825_setDirection(DRV8825_LEFT, DRV8825_REVERSE);
-                outResponse = 0;
+                outResponse = RESPONSE_OK;
                 outParameter = 0;
             } else {
-                outResponse = 1; // Error
+                outResponse = RESPONSE_ERROR; // Error
                 outParameter = 0;
             }
             break;
@@ -115,29 +127,29 @@ void processSpiCommand()
         case 0x11: // Get left motor direction
             if (drv8825_getDirection(DRV8825_LEFT) == 0) outParameter = 0;
             else outParameter = 1;
-            outResponse = 0;
+            outResponse = RESPONSE_OK;
             break;
 
         case 0x12: // Set left motor SPS (speed)
             drv8825_setSpeed(DRV8825_LEFT, (uint16_t)inParameter);
-            outResponse = 0;
+            outResponse = RESPONSE_OK;
             outParameter = 0;
             break;
 
         case 0x13: // Get left motor SPS (speed)
             outParameter = drv8825_getSpeed(DRV8825_LEFT);
-            outResponse = 0;
+            outResponse = RESPONSE_OK;
             break;
 
         case 0x14: // Set left motor steps
             drv8825_setSteps(DRV8825_LEFT, inParameter);
-            outResponse = 0;
+            outResponse = RESPONSE_OK;
             outParameter = 0;
             break;
 
         case 0x15: // Get left motor steps
             outParameter = drv8825_getSteps(DRV8825_LEFT);
-            outResponse = 0;
+            outResponse = RESPONSE_OK;
             break;
 
         // Right motor commands --------------------------------------------------------------------
@@ -146,10 +158,10 @@ void processSpiCommand()
             if (drv8825_getSteps(DRV8825_RIGHT) == 0) {
                 if (inParameter == 0) drv8825_setDirection(DRV8825_RIGHT, DRV8825_FORWARD);
                 else drv8825_setDirection(DRV8825_RIGHT, DRV8825_REVERSE);
-                outResponse = 0;
+                outResponse = RESPONSE_OK;
                 outParameter = 0;
             } else {
-                outResponse = 1; // Error
+                outResponse = RESPONSE_ERROR; // Error
                 outParameter = 0;
             }
             break;
@@ -157,72 +169,75 @@ void processSpiCommand()
         case 0x21: // Get right motor direction
             if (drv8825_getDirection(DRV8825_RIGHT) == 0) outParameter = 0;
             else outParameter = 1;
-            outResponse = 0;
+            outResponse = RESPONSE_OK;
             break;
 
         case 0x22: // Set right motor SPS (speed)
             drv8825_setSpeed(DRV8825_RIGHT, (uint16_t)inParameter);
-            outResponse = 0;
+            outResponse = RESPONSE_OK;
             outParameter = 0;
             break;
 
         case 0x23: // Get right motor SPS (speed)
             outParameter = drv8825_getSpeed(DRV8825_RIGHT);
-            outResponse = 0;
+            outResponse = RESPONSE_OK;
             break;
 
         case 0x24: // Set right motor steps
             drv8825_setSteps(DRV8825_RIGHT, inParameter);
-            outResponse = 0;
+            outResponse = RESPONSE_OK;
             outParameter = 0;
             break;
 
         case 0x25: // Get right motor steps
             outParameter = drv8825_getSteps(DRV8825_RIGHT);
-            outResponse = 0;
+            outResponse = RESPONSE_OK;
             break;
 
         // Unknown command
         default:
-            outResponse = 1;
+            outResponse = RESPONSE_ERROR;
             outParameter = 0;
     }
 
     // Join the output response and parameter into the out buffer
-    _spiBuffer[0] = outResponse;
-    _spiBuffer[1] = (uint8_t)((outParameter & 0xFF000000UL) >> 24);
-    _spiBuffer[2] = (uint8_t)((outParameter & 0x00FF0000UL) >> 16);
-    _spiBuffer[3] = (uint8_t)((outParameter & 0x0000FF00UL) >> 8);
-    _spiBuffer[4] = (uint8_t)((outParameter & 0x000000FFUL));
+    _spiTxBuffer[0] = outResponse;
+    _spiTxBuffer[1] = (uint8_t)((outParameter & 0xFF000000UL) >> 24);
+    _spiTxBuffer[2] = (uint8_t)((outParameter & 0x00FF0000UL) >> 16);
+    _spiTxBuffer[3] = (uint8_t)((outParameter & 0x0000FF00UL) >> 8);
+    _spiTxBuffer[4] = (uint8_t)((outParameter & 0x000000FFUL));
 }
 
 // SPI interrupt handlers ---------------------------------------------------------------------------------------------
 
 void spi_initialise()
 {
-    // Initialise the buffer
-    _spiBuffer[0] = 0;
-    _spiBuffer[1] = 0;
-    _spiBuffer[2] = 0;
-    _spiBuffer[3] = 0;
-    _spiBuffer[4] = 0;
+    // Initialise the buffers
+    for (uint16_t i = 0; i < 5; i++) {
+        _spiTxBuffer[i] = 0;
+        _spiRxBuffer[i] = 0;
+    }
 
-    // Enable the HAL SPI receive interrupt so
     // Wait for 5 bytes of incoming data
-    HAL_SPI_Receive_IT(&hspi1, _spiBuffer, 5);
+    _spiState = SPISTATE_WAITING;
+    HAL_SPI_TransmitReceive_IT(&hspi1, _spiTxBuffer, _spiRxBuffer, 5);
 }
 
-void spi_receiveCompleteCallback()
+void spi_transmitReceiveCompleteCallback()
 {
-    // Process the received command
-    processSpiCommand();
+    if (_spiState == SPISTATE_WAITING) {
+        // Process the received command
+        processSpiCommand();
+        // Send the response
+        _spiState = SPISTATE_SENDING;
+        HAL_SPI_TransmitReceive_IT(&hspi1, _spiTxBuffer, _spiRxBuffer, 5);
+    } else {
+        // Wait for the next command
+        _spiState = SPISTATE_WAITING;
 
-    // Send the response
-    HAL_SPI_Transmit_IT(&hspi1, _spiBuffer, 5);
-}
+        // Clear the transmit buffer
+        for (uint16_t i = 0; i < 5; i++) _spiTxBuffer[i] = 0;
 
-void spi_transmitCompleteCallback()
-{
-    // Rearm the reception
-    HAL_SPI_Receive_IT(&hspi1, _spiBuffer, 5);
+        HAL_SPI_TransmitReceive_IT(&hspi1, _spiTxBuffer, _spiRxBuffer, 5);
+    }
 }
